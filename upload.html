@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Listing | RentIreland</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+}
+
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+input, textarea, button, select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+textarea {
+  min-height: 140px;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.note {
+  font-size: 13px;
+  color: #555;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Add a Rental Listing</h1>
+
+  <form onsubmit="submitListing(event)">
+    <input placeholder="Property title" required>
+    <select required>
+      <option value="">County</option>
+      <option>Dublin</option>
+      <option>Galway</option>
+      <option>Cork</option>
+    </select>
+    <input placeholder="Monthly rent (€)" required>
+    <input placeholder="Image URL (photo link)" required>
+    <textarea placeholder="Property description" required></textarea>
+    <button type="submit">Submit Listing</button>
+  </form>
+
+  <p class="note">
+    Listings are reviewed before appearing on the platform.
+  </p>
+</div>
+
+<script>
+function submitListing(e) {
+  e.preventDefault();
+  alert("Listing submitted for review. (Manual approval in MVP)");
+}
+</script>
+
+</body>
+</html>
