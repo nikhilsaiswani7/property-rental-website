@@ -45,6 +45,7 @@
       border-radius: 6px;
       cursor: pointer;
       opacity: 0.7;
+      pointer-events: auto;
     }
 
     .thumbnails img:hover {
@@ -132,14 +133,10 @@
     >
 
     <div class="thumbnails">
-      <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-           onclick="changeImage(this.src)">
-      <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c"
-           onclick="changeImage(this.src)">
-      <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511"
-           onclick="changeImage(this.src)">
-      <img src="https://images.unsplash.com/photo-1494526585095-c41746248156"
-           onclick="changeImage(this.src)">
+      <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
+      <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c">
+      <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
+      <img src="https://images.unsplash.com/photo-1494526585095-c41746248156">
     </div>
   </div>
 
@@ -185,10 +182,15 @@
 </div>
 
 <script>
-/* IMAGE SWITCHER */
-function changeImage(src) {
-  document.getElementById("mainImage").src = src;
-}
+/* GALLERY CLICK HANDLER */
+const mainImage = document.getElementById("mainImage");
+const thumbnails = document.querySelectorAll(".thumbnails img");
+
+thumbnails.forEach(img => {
+  img.addEventListener("click", () => {
+    mainImage.src = img.src;
+  });
+});
 
 /* ENQUIRY FORM */
 document.querySelector(".enquiry").addEventListener("submit", function(e) {
