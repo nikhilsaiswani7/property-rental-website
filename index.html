@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Property Finder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial; background:#f9fafb; margin:0; }
+    header { padding:30px; text-align:center; background:white; }
+    .search { display:flex; gap:10px; padding:20px; justify-content:center; flex-wrap:wrap; }
+    input, button { padding:10px; font-size:16px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
+    .card { background:white; border-radius:10px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,.1); }
+    .card img { width:100%; height:180px; object-fit:cover; }
+    .card div { padding:15px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Find Your Next Home</h1>
+  <p>A smarter property website</p>
+</header>
+
+<div class="search">
+  <input placeholder="Location">
+  <input placeholder="Max Price">
+  <button>Search</button>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
+    <div>
+      <h3>Modern 2 Bed Apartment</h3>
+      <p>Dublin City</p>
+      <strong>€2,100 / month</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c">
+    <div>
+      <h3>Cozy 1 Bed Studio</h3>
+      <p>Cork</p>
+      <strong>€1,400 / month</strong>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
