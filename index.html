@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +6,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+}
+
+/* HEADER */
+header {
+  background: white;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+
+header h1 {
+  color: #2563eb;
+  margin: 0;
+}
+
+/* SEARCH BAR */
+.search-bar {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  background: white;
+  flex-wrap: wrap;
+}
+
 .search-bar input,
 .search-bar select,
 .search-bar button {
   padding: 12px;
   font-size: 16px;
-  .map-section {
+}
+
+.search-bar button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* MAP */
+.map-section {
   background: white;
   padding: 30px 20px;
   margin: 20px;
@@ -36,47 +75,11 @@
   font-size: 14px;
 }
 
-/* Approximate Ireland locations */
 .dublin { top: 45%; left: 60%; }
 .cork { top: 65%; left: 45%; }
 .galway { top: 50%; left: 40%; }
 
-}
-}
-
-header {
-  background: white;
-  padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,.05);
-}
-
-header h1 {
-  color: #2563eb;
-  margin: 0;
-}
-
-.search-bar {
-  display: flex;
-  gap: 10px;
-  padding: 20px;
-  background: white;
-}
-
-.search-bar input, .search-bar button {
-  padding: 12px;
-  font-size: 16px;
-}
-
-.search-bar button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
+/* CARDS */
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -101,10 +104,6 @@ header h1 {
   padding: 15px;
 }
 
-.card-content h3 {
-  margin: 0;
-}
-
 .price {
   color: #2563eb;
   font-size: 20px;
@@ -117,32 +116,29 @@ header h1 {
 
 <header>
   <h1>OpenRent</h1>
-  <strong>Rent • Buy • Discover</strong>
+  <strong>Rent • Discover</strong>
 </header>
 
-<select id="county">
-  <option value="">Select County</option>
-  <option>Dublin</option>
-  <option>Cork</option>
-  <option>Galway</option>
-  <option>Limerick</option>
-  <option>Waterford</option>
-  <option>Nationwide</option>
-</select>
+<!-- SEARCH BAR -->
+<div class="search-bar">
+  <select id="county">
+    <option value="">Select County</option>
+    <option>Dublin</option>
+    <option>Cork</option>
+    <option>Galway</option>
+    <option>Limerick</option>
+    <option>Waterford</option>
+    <option>Nationwide</option>
+  </select>
 
-<input id="maxPrice" placeholder="Max Price (€)">
-
-
-<input id="maxPrice" placeholder="Max Price (€)">
-<button onclick="filterProperties()">Search</button>
-
-
-  <input placeholder="Max Price">
-  <button>Search</button>
+  <input id="maxPrice" placeholder="Max Price (€)">
+  <button onclick="filterProperties()">Search</button>
 </div>
+
+<!-- MAP -->
 <section class="map-section">
   <h2>Search rentals on the map</h2>
-  <p>Explore rental properties across Ireland. (Map search coming soon)</p>
+  <p>Explore rental properties across Ireland (map coming soon)</p>
 
   <div class="map-placeholder">
     <div class="pin dublin">Dublin</div>
@@ -150,95 +146,56 @@ header h1 {
     <div class="pin galway">Galway</div>
   </div>
 </section>
+
+<!-- LISTINGS -->
 <div class="container">
 
-<div class="card" data-county="Dublin" data-price="2100">
-
+  <div class="card" data-county="Dublin" data-price="2100">
     <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
     <div class="card-content">
-      <h3>
-  <a href="property.html" style="text-decoration:none;color:black;">
-    Modern 2 Bed Apartment
-  </a>
-</h3>
-
+      <h3><a href="property.html">Modern 2 Bed Apartment</a></h3>
       <p>Dublin City</p>
       <div class="price">€2,100 / month</div>
     </div>
   </div>
 
   <div class="card" data-county="Galway" data-price="1800">
-
-
     <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c">
     <div class="card-content">
-      <h3>
-  <a href="property.html" style="text-decoration:none;color:black;">
-    Modern 2 Bed Apartment
-  </a>
-</h3>
-
+      <h3><a href="property.html">Modern 2 Bed Apartment</a></h3>
       <p>Galway</p>
-      <div class="price">€2,500 / month</div>
+      <div class="price">€1,800 / month</div>
     </div>
   </div>
 
-<div class="card" data-county="Cork" data-price="1400">
-
+  <div class="card" data-county="Cork" data-price="1400">
     <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
     <div class="card-content">
-     <h3>
-  <a href="property.html" style="text-decoration:none;color:black;">
-    Modern 2 Bed Apartment
-  </a>
-</h3>
-
+      <h3><a href="property.html">Modern 2 Bed Apartment</a></h3>
       <p>Cork City</p>
-      <div class="price">€1,300 / month</div>
+      <div class="price">€1,400 / month</div>
     </div>
   </div>
 
 </div>
+
 <script>
 function filterProperties() {
-  const selectedCounty = document.getElementById("county").value;
+  const county = document.getElementById("county").value;
   const maxPrice = document.getElementById("maxPrice").value;
   const cards = document.querySelectorAll(".card");
 
   cards.forEach(card => {
-    const cardCounty = card.getAttribute("data-county");
-    const cardPrice = card.getAttribute("data-price");
+    const cardCounty = card.dataset.county;
+    const cardPrice = Number(card.dataset.price);
 
     let show = true;
 
-    if (selectedCounty && selectedCounty !== "Nationwide" && cardCounty !== selectedCounty) {
+    if (county && county !== "Nationwide" && cardCounty !== county) {
       show = false;
     }
 
-    if (maxPrice && Number(cardPrice) > Number(maxPrice)) {
-      show = false;
-    }
-
-    card.style.display = show ? "block" : "none";
-  });
-}
-<script>
-function filterProperties() {
-  const selectedCounty = document.getElementById("county").value;
-  const maxPrice = document.getElementById("maxPrice").value;
-  const cards = document.querySelectorAll(".card");
-
-  cards.forEach(card => {
-    const cardCounty = card.getAttribute("data-county");
-    const cardPrice = card.getAttribute("data-price");
-
-    let show = true;
-
-    if (selectedCounty && selectedCounty !== "Nationwide" && cardCounty !== selectedCounty) {
-      show = false;
-    }
-
-    if (maxPrice && Number(cardPrice) > Number(maxPrice)) {
+    if (maxPrice && cardPrice > Number(maxPrice)) {
       show = false;
     }
 
@@ -249,9 +206,4 @@ function filterProperties() {
 
 </body>
 </html>
-
-
-</body>
-</html>
-
 
