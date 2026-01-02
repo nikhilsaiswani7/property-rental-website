@@ -2,260 +2,31 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>RentIreland.ie</title>
+<title>Add a Listing | RentIreland</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- Leaflet -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-               Roboto, Helvetica, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   background: #f5f7fa;
-}
-
-/* HEADER */
-header {
-  background: white;
-  padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,.05);
-}
-
-header h1 {
   margin: 0;
-  color: #2563eb;
 }
 
-/* SEARCH */
-.search-bar {
+.container {
+  max-width: 600px;
+  margin: 40px auto;
   background: white;
-  padding: 20px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  padding: 25px;
+  border-radius: 14px;
 }
 
-.search-bar select,
-.search-bar input,
-.search-bar button {
-  padding: 12px;
+input, textarea, button {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
   font-size: 16px;
 }
 
-.search-bar button {
+button {
   background: #2563eb;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-/* MAP */
-.map-section {
-  margin: 20px;
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-}
-
-#map {
-  height: 450px;
-  border-radius: 14px;
-  margin-top: 15px;
-}
-
-/* LISTINGS */
-.container {
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,.08);
-}
-
-.card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.card-content {
-  padding: 15px;
-}
-
-.card-content h3 {
-  margin: 0 0 5px;
-}
-
-.card-content a {
-  text-decoration: none;
-  color: black;
-}
-
-.price {
-  color: #2563eb;
-  font-size: 18px;
-  font-weight: bold;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <h1>RentIreland</h1>
-  <strong>Find your next home</strong>
-</header>
-
-<!-- SEARCH -->
-<div class="search-bar">
-  <select id="county">
-    <option value="">County</option>
-    <option>Dublin</option>
-    <option>Galway</option>
-    <option>Cork</option>
-    <option>Nationwide</option>
-  </select>
-
-  <input id="maxPrice" placeholder="Max rent (€)">
-  <button onclick="filterProperties()">Search</button>
-</div>
-
-<!-- MAP -->
-<section class="map-section">
-  <h2>Search rentals on the map</h2>
-  <div id="map"></div>
-</section>
-
-<!-- LISTINGS -->
-<div class="container">
-
-  <div class="card" data-county="Dublin" data-price="2100">
-    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
-    <div class="card-content">
-      <h3><a href="property.html">Modern 2 Bed Apartment</a></h3>
-      <p>Dublin City</p>
-      <div class="price">€2,100 / month</div>
-    </div>
-  </div>
-
-  <div class="card" data-county="Galway" data-price="1800">
-    <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c">
-    <div class="card-content">
-      <h3><a href="property.html">Bright City Apartment</a></h3>
-      <p>Galway City</p>
-      <div class="price">€1,800 / month</div>
-    </div>
-  </div>
-
-  <div class="card" data-county="Cork" data-price="1400">
-    <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
-    <div class="card-content">
-      <h3><a href="property.html">Cozy 1 Bed</a></h3>
-      <p>Cork City</p>
-      <div class="price">€1,400 / month</div>
-    </div>
-  </div>
-
-</div>
-
-<script>
-/* FILTER */
-function filterProperties() {
-  const county = document.getElementById("county").value;
-  const maxPrice = document.getElementById("maxPrice").value;
-
-  document.querySelectorAll(".card").forEach(card => {
-    let show = true;
-    if (county && county !== "Nationwide" && card.dataset.county !== county)
-      show = false;
-    if (maxPrice && Number(card.dataset.price) > Number(maxPrice))
-      show = false;
-    card.style.display = show ? "block" : "none";
-  });
-}
-
-/* =========================
-   IRELAND-LOCKED MAP
-========================= */
-
-// Ireland bounds
-const irelandBounds = L.latLngBounds(
-  [51.3, -10.6], // South-West
-  [55.5, -5.3]   // North-East
-);
-
-// Create map
-const map = L.map("map", {
-  maxBounds: irelandBounds,
-  maxBoundsViscosity: 1.0,
-  zoomControl: true,
-  worldCopyJump: false
-});
-
-// Disable world wrapping
-map.options.crs.wrapLng = false;
-map.options.crs.wrapLat = false;
-
-// Fit map to Ireland
-map.fitBounds(irelandBounds);
-
-// Lock minimum zoom
-map.setMinZoom(map.getZoom());
-map.setMaxZoom(13);
-
-// Tiles (no wrap)
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap contributors",
-  noWrap: true
-}).addTo(map);
-
-// Properties
-const properties = [
-  {
-    title: "Modern 2 Bed Apartment",
-    lat: 53.3498,
-    lng: -6.2603,
-    url: "property.html"
-  },
-  {
-    title: "Bright City Apartment",
-    lat: 53.2707,
-    lng: -9.0568,
-    url: "property.html"
-  },
-  {
-    title: "Cozy 1 Bed",
-    lat: 51.8985,
-    lng: -8.4756,
-    url: "property.html"
-  }
-];
-
-// Add markers
-properties.forEach(p => {
-  L.marker([p.lat, p.lng])
-    .addTo(map)
-    .bindPopup(
-      `<strong>${p.title}</strong><br>
-       <a href="${p.url}">View property</a>`
-    );
-});
-</script>
-
-</body>
-</html>
+  color
