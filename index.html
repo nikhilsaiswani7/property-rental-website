@@ -2,112 +2,127 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>OpenRent.ie</title>
+<title>RentIreland.ie</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+:root {
+  --primary:#2563eb;
+  --bg:#f5f7fa;
+}
+
+* { box-sizing:border-box; }
+
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
+  margin:0;
+  font-family: system-ui, Arial, sans-serif;
+  background:var(--bg);
 }
 
 /* HEADER */
 header {
-  background: white;
-  padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  background:white;
+  padding:18px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
 }
 
 header h1 {
-  color: #2563eb;
-  margin: 0;
+  margin:0;
+  color:var(--primary);
 }
 
-/* SEARCH BAR */
+/* SEARCH */
 .search-bar {
-  display: flex;
-  gap: 10px;
-  padding: 20px;
-  background: white;
-  flex-wrap: wrap;
+  background:white;
+  padding:20px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
-.search-bar input,
 .search-bar select,
+.search-bar input,
 .search-bar button {
-  padding: 12px;
-  font-size: 16px;
+  padding:12px;
+  font-size:16px;
 }
 
 .search-bar button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  cursor: pointer;
+  background:var(--primary);
+  color:white;
+  border:none;
+  cursor:pointer;
 }
 
 /* MAP */
-.map-section {
-  background: white;
-  padding: 30px 20px;
-  margin: 20px;
-  border-radius: 12px;
+.map {
+  margin:20px;
+  background:white;
+  border-radius:14px;
+  padding:25px;
 }
 
-.map-placeholder {
-  position: relative;
-  height: 400px;
-  background: #e5e7eb;
-  border-radius: 12px;
-  margin-top: 20px;
+.map-box {
+  height:380px;
+  background:#e5e7eb;
+  border-radius:14px;
+  position:relative;
 }
 
 .pin {
-  position: absolute;
-  background: #2563eb;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 14px;
+  position:absolute;
+  background:var(--primary);
+  color:white;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:14px;
 }
 
-.dublin { top: 45%; left: 60%; }
-.cork { top: 65%; left: 45%; }
-.galway { top: 50%; left: 40%; }
+.dublin { top:45%; left:60%; }
+.cork { top:65%; left:45%; }
+.galway { top:50%; left:40%; }
 
-/* CARDS */
-.container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  padding: 20px;
+/* LISTINGS */
+.listings {
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
 }
 
 .card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0,0,0,.08);
+  background:white;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
 .card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+  width:100%;
+  height:200px;
+  object-fit:cover;
 }
 
 .card-content {
-  padding: 15px;
+  padding:15px;
+}
+
+.card-content h3 {
+  margin:0 0 5px;
+}
+
+.card-content a {
+  text-decoration:none;
+  color:black;
 }
 
 .price {
-  color: #2563eb;
-  font-size: 20px;
-  font-weight: bold;
+  color:var(--primary);
+  font-weight:bold;
+  font-size:18px;
 }
 </style>
 </head>
@@ -115,14 +130,13 @@ header h1 {
 <body>
 
 <header>
-  <h1>OpenRent</h1>
-  <strong>Rent • Discover</strong>
+  <h1>RentIreland</h1>
+  <strong>Find your next home</strong>
 </header>
 
-<!-- SEARCH BAR -->
 <div class="search-bar">
   <select id="county">
-    <option value="">Select County</option>
+    <option value="">County</option>
     <option>Dublin</option>
     <option>Cork</option>
     <option>Galway</option>
@@ -131,29 +145,26 @@ header h1 {
     <option>Nationwide</option>
   </select>
 
-  <input id="maxPrice" placeholder="Max Price (€)">
-  <button onclick="filterProperties()">Search</button>
+  <input id="maxPrice" placeholder="Max rent (€)">
+  <button onclick="filter()">Search</button>
 </div>
 
-<!-- MAP -->
-<section class="map-section">
-  <h2>Search rentals on the map</h2>
-  <p>Explore rental properties across Ireland (map coming soon)</p>
-
-  <div class="map-placeholder">
+<section class="map">
+  <h2>Search on the map</h2>
+  <p>Explore rentals across Ireland</p>
+  <div class="map-box">
     <div class="pin dublin">Dublin</div>
     <div class="pin cork">Cork</div>
     <div class="pin galway">Galway</div>
   </div>
 </section>
 
-<!-- LISTINGS -->
-<div class="container">
+<section class="listings">
 
   <div class="card" data-county="Dublin" data-price="2100">
     <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
     <div class="card-content">
-      <h3><a href="property.html">Modern 2 Bed Apartment</a></h3>
+      <h3><a href="property.html">Modern 2-Bed Apartment</a></h3>
       <p>Dublin City</p>
       <div class="price">€2,100 / month</div>
     </div>
@@ -162,8 +173,8 @@ header h1 {
   <div class="card" data-county="Galway" data-price="1800">
     <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c">
     <div class="card-content">
-      <h3><a href="property.html">Modern 2 Bed Apartment</a></h3>
-      <p>Galway</p>
+      <h3><a href="property.html">Bright City Apartment</a></h3>
+      <p>Galway City</p>
       <div class="price">€1,800 / month</div>
     </div>
   </div>
@@ -171,34 +182,22 @@ header h1 {
   <div class="card" data-county="Cork" data-price="1400">
     <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
     <div class="card-content">
-      <h3><a href="property.html">Modern 2 Bed Apartment</a></h3>
+      <h3><a href="property.html">Cozy 1-Bed</a></h3>
       <p>Cork City</p>
       <div class="price">€1,400 / month</div>
     </div>
   </div>
 
-</div>
+</section>
 
 <script>
-function filterProperties() {
+function filter() {
   const county = document.getElementById("county").value;
-  const maxPrice = document.getElementById("maxPrice").value;
-  const cards = document.querySelectorAll(".card");
-
-  cards.forEach(card => {
-    const cardCounty = card.dataset.county;
-    const cardPrice = Number(card.dataset.price);
-
+  const max = document.getElementById("maxPrice").value;
+  document.querySelectorAll(".card").forEach(card => {
     let show = true;
-
-    if (county && county !== "Nationwide" && cardCounty !== county) {
-      show = false;
-    }
-
-    if (maxPrice && cardPrice > Number(maxPrice)) {
-      show = false;
-    }
-
+    if (county && county !== "Nationwide" && card.dataset.county !== county) show = false;
+    if (max && Number(card.dataset.price) > Number(max)) show = false;
     card.style.display = show ? "block" : "none";
   });
 }
@@ -206,4 +205,3 @@ function filterProperties() {
 
 </body>
 </html>
-
