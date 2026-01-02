@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <head>
   <title>Property Details</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,6 +14,7 @@
       margin: auto;
       background: white;
       padding: 20px;
+      border-radius: 14px;
     }
 
     img {
@@ -25,128 +24,39 @@
     }
 
     .price {
-  color: #2563eb;
-  font-size: 26px;
-  font-weight: bold;
-}
+      color: #2563eb;
+      font-size: 26px;
+      font-weight: bold;
+    }
 
-.enquiry {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
-}
+    /* ENQUIRY FORM */
+    .enquiry {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
 
-.enquiry input,
-.enquiry textarea {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-}
+    .enquiry input,
+    .enquiry textarea {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
 
-.enquiry textarea {
-  min-height: 120px;
-}
+    .enquiry textarea {
+      min-height: 120px;
+    }
 
-.enquiry button {
-  background: #2563eb;
-  color: white;
-  padding: 14px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-
-    button {
-      padding: 14px;
-      width: 100%;
-      font-size: 18px;
+    .enquiry button {
       background: #2563eb;
       color: white;
+      padding: 14px;
+      font-size: 16px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      margin-top: 20px;
     }
   </style>
-  .enquiry {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.enquiry input,
-.enquiry textarea {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-}
-
-.enquiry textarea {
-  min-height: 120px;
-}
-
-.enquiry button {
-  background: #2563eb;
-  color: white;
-  padding: 14px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 </head>
-
-<body>
-
-<div class="container">
-
-  <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
-
-  <h1>Modern 2 Bed Apartment</h1>
-  <p><strong>Location:</strong> Dublin City</p>
-
-  <div class="price">€2,100 / month</div>
-
-  <h3>Description</h3>
-  <p>
-    Bright and modern two-bedroom apartment located in the heart of Dublin.
-    Close to transport, shops, and amenities. Ideal for professionals.
-  </p>
-
-  <h3>Send an enquiry</h3>
-
-<form class="enquiry">
-  <input type="text" placeholder="Your name" required>
-  <input type="email" placeholder="Your email" required>
-  <textarea placeholder="Your message to the landlord" required></textarea>
-
-  <button type="submit">Send Enquiry</button>
-</form>
-
-
-</div>
-<script>
-document.querySelector(".enquiry").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const subject = encodeURIComponent("Rental Enquiry");
-  const body = encodeURIComponent(
-    "Name: " + this[0].value + "\n" +
-    "Email: " + this[1].value + "\n\n" +
-    this[2].value
-  );
-
-  window.location.href =
-    "mailto:landlord@example.com?subject=" + subject + "&body=" + body;
-});
-</script>
-
-</body>
-</html>
