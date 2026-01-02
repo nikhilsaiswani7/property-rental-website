@@ -101,7 +101,24 @@ const properties = [
 ];
 
 /* MAP (SIMPLE & STABLE) */
-const map = L.map("map").setView([53.4, -8.2], 7);
+// Ireland bounds
+const irelandBounds = L.latLngBounds(
+  [51.3, -10.6], // South-West
+  [55.5, -5.3]   // North-East
+);
+
+// Create map (keep it simple)
+const map = L.map("map", {
+  maxBounds: irelandBounds,
+  maxBoundsViscosity: 0.8
+});
+
+// Fit map to Ireland
+map.fitBounds(irelandBounds);
+
+// Prevent zooming out too far
+map.setMinZoom(map.getZoom());
+map.setMaxZoom(13);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "© OpenStreetMap"
