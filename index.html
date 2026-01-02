@@ -189,8 +189,17 @@ function filterProperties() {
 }
 
 /* MAP */
-const map = L.map("map").setView([53.4129, -8.2439], 7);
+const irelandBounds = [
+  [51.3, -10.6], // South-West
+  [55.5, -5.3]   // North-East
+];
 
+const map = L.map("map", {
+  maxBounds: irelandBounds,
+  maxBoundsViscosity: 1.0, // prevents dragging outside
+  minZoom: 6,
+  maxZoom: 13
+}).fitBounds(irelandBounds);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "© OpenStreetMap contributors"
 }).addTo(map);
