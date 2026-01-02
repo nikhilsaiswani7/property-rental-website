@@ -20,16 +20,45 @@
       border-radius: 14px;
     }
 
+    /* IMAGE GALLERY */
+    .gallery {
+      margin-bottom: 25px;
+    }
+
     .hero {
       width: 100%;
       max-height: 450px;
       object-fit: cover;
       border-radius: 12px;
-      margin-bottom: 20px;
+    }
+
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .thumbnails img {
+      width: 90px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    .thumbnails img:hover {
+      opacity: 1;
     }
 
     h1 {
-      margin-top: 0;
+      margin-top: 20px;
+    }
+
+    .meta {
+      color: #555;
+      font-size: 15px;
+      margin-bottom: 10px;
     }
 
     .price {
@@ -39,9 +68,21 @@
       margin: 10px 0;
     }
 
-    .meta {
+    .details {
+      margin: 12px 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .availability {
+      font-size: 14px;
       color: #555;
-      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    .verified {
+      color: green;
+      font-weight: bold;
       margin-bottom: 20px;
     }
 
@@ -74,47 +115,6 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
-    .verified {
-      color: green;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    .details {
-  margin: 12px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.availability {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 20px;
-}
-.gallery {
-  margin-bottom: 25px;
-}
-
-.thumbnails {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.thumbnails img {
-  width: 90px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0.7;
-}
-
-.thumbnails img:hover {
-  opacity: 1;
-}
-
-
   </style>
 </head>
 
@@ -122,27 +122,28 @@
 
 <div class="container">
 
-
+  <!-- IMAGE GALLERY -->
   <div class="gallery">
-  <img id="mainImage"
-       src="https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-       class="hero"
-       alt="Property image">
+    <img
+      id="mainImage"
+      class="hero"
+      src="https://images.unsplash.com/photo-1568605114967-8130f3a36994"
+      alt="Property image"
+    >
 
-  <div class="thumbnails">
-    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-         onclick="changeImage(this.src)">
-    <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c"
-         onclick="changeImage(this.src)">
-    <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511"
-         onclick="changeImage(this.src)">
-    <img src="https://images.unsplash.com/photo-1494526585095-c41746248156"
-         onclick="changeImage(this.src)">
+    <div class="thumbnails">
+      <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994"
+           onclick="changeImage(this.src)">
+      <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c"
+           onclick="changeImage(this.src)">
+      <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511"
+           onclick="changeImage(this.src)">
+      <img src="https://images.unsplash.com/photo-1494526585095-c41746248156"
+           onclick="changeImage(this.src)">
+    </div>
   </div>
-</div>
 
-  >
-
+  <!-- PROPERTY INFO -->
   <h1>Modern 2 Bed Apartment</h1>
 
   <div class="meta">
@@ -150,17 +151,17 @@
   </div>
 
   <div class="price">€2,100 / month</div>
+
   <div class="details">
-  🛏 2 Beds &nbsp;|&nbsp;
-  🛁 2 Baths &nbsp;|&nbsp;
-  🪑 Furnished &nbsp;|&nbsp;
-  ⚡ BER: B2
-</div>
+    🛏 2 Beds &nbsp;|&nbsp;
+    🛁 2 Baths &nbsp;|&nbsp;
+    🪑 Furnished &nbsp;|&nbsp;
+    ⚡ BER: B2
+  </div>
 
-<p class="availability">
-  📅 Available from: 1 November 2026
-</p>
-
+  <p class="availability">
+    📅 Available from: 1 November 2026
+  </p>
 
   <div class="verified">✔ Verified Listing</div>
 
@@ -171,6 +172,7 @@
     or couples.
   </p>
 
+  <!-- ENQUIRY FORM -->
   <h3>Send an enquiry</h3>
 
   <form class="enquiry">
@@ -183,6 +185,12 @@
 </div>
 
 <script>
+/* IMAGE SWITCHER */
+function changeImage(src) {
+  document.getElementById("mainImage").src = src;
+}
+
+/* ENQUIRY FORM */
 document.querySelector(".enquiry").addEventListener("submit", function(e) {
   e.preventDefault();
 
@@ -196,12 +204,6 @@ document.querySelector(".enquiry").addEventListener("submit", function(e) {
   window.location.href =
     "mailto:landlord@example.com?subject=" + subject + "&body=" + body;
 });
-  <script>
-function changeImage(src) {
-  document.getElementById("mainImage").src = src;
-}
-</script>
-
 </script>
 
 </body>
