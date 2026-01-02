@@ -6,7 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Leaflet CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
 <style>
 body {
@@ -21,6 +24,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  color: #2563eb;
 }
 
 header a {
@@ -76,11 +84,13 @@ header a {
 
 <div class="container" id="listings"></div>
 
-<!-- Leaflet JS (MUST be after map div) -->
+<!-- Leaflet JS (AFTER map div) -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-/* DATA */
+/* =========================
+   PROPERTY DATA (3 LISTINGS)
+========================= */
 const properties = [
   {
     title: "Modern 2 Bed Apartment",
@@ -97,38 +107,51 @@ const properties = [
     lng: -9.0568,
     img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c",
     url: "property.html"
+  },
+  {
+    title: "Cozy 1 Bed",
+    price: 1400,
+    lat: 51.8985,
+    lng: -8.4756,
+    img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
+    url: "property.html"
   }
 ];
 
-/* MAP (SIMPLE & STABLE) */
+/* =========================
+   MAP — SAFE IRELAND FOCUS
+========================= */
+
 // Ireland bounds
 const irelandBounds = L.latLngBounds(
   [51.3, -10.6], // South-West
   [55.5, -5.3]   // North-East
 );
 
-// Create map (keep it simple)
+// Create map
 const map = L.map("map", {
   maxBounds: irelandBounds,
-  maxBoundsViscosity: 0.8
+  maxBoundsViscosity: 1.0,
+  minZoom: 6,
+  maxZoom: 13
 });
 
 // Fit map to Ireland
 map.fitBounds(irelandBounds);
 
-// Prevent zooming out too far
-map.setMinZoom(map.getZoom());
-map.setMaxZoom(13);
-
+// Tile layer (no wrap prevents world repetition)
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap"
+  attribution: "© OpenStreetMap contributors",
+  noWrap: true
 }).addTo(map);
 
-/* RENDER */
+/* =========================
+   RENDER LISTINGS + PINS
+========================= */
 const listings = document.getElementById("listings");
 
 properties.forEach(p => {
-  // Card
+  // Listing card
   listings.innerHTML += `
     <div class="card">
       <img src="${p.img}">
@@ -139,10 +162,13 @@ properties.forEach(p => {
     </div>
   `;
 
-  // Marker
+  // Map marker
   L.marker([p.lat, p.lng])
     .addTo(map)
-    .bindPopup(`<strong>${p.title}</strong><br><a href="${p.url}">View</a>`);
+    .bindPopup(
+      `<strong>${p.title}</strong><br>
+       <a href="${p.url}">View property</a>`
+    );
 });
 </script>
 
