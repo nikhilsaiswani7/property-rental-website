@@ -7,24 +7,19 @@
 
 <style>
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
   background: #f5f7fa;
+  font-family: Arial, sans-serif;
 }
 
 .container {
-  max-width: 600px;
-  margin: 40px auto;
+  max-width: 500px;
+  margin: 50px auto;
   background: white;
   padding: 25px;
-  border-radius: 14px;
+  border-radius: 12px;
 }
 
-h1 {
-  margin-top: 0;
-}
-
-input, textarea, button, select {
+input, textarea, button {
   width: 100%;
   padding: 14px;
   margin-bottom: 12px;
@@ -32,7 +27,7 @@ input, textarea, button, select {
 }
 
 textarea {
-  min-height: 140px;
+  min-height: 120px;
 }
 
 button {
@@ -40,13 +35,6 @@ button {
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 8px;
-}
-
-.note {
-  font-size: 13px;
-  color: #555;
-  margin-top: 10px;
 }
 </style>
 </head>
@@ -54,32 +42,25 @@ button {
 <body>
 
 <div class="container">
-  <h1>Add a Rental Listing</h1>
+  <h1>Add Listing</h1>
 
-  <form onsubmit="submitListing(event)">
+  <form id="uploadForm">
     <input placeholder="Property title" required>
-    <select required>
-      <option value="">County</option>
-      <option>Dublin</option>
-      <option>Galway</option>
-      <option>Cork</option>
-    </select>
     <input placeholder="Monthly rent (€)" required>
-    <input placeholder="Image URL (photo link)" required>
-    <textarea placeholder="Property description" required></textarea>
-    <button type="submit">Submit Listing</button>
+    <input placeholder="Image URL" required>
+    <textarea placeholder="Description" required></textarea>
+    <button type="submit">Submit</button>
   </form>
 
-  <p class="note">
-    Listings are reviewed before appearing on the platform.
-  </p>
+  <p id="status"></p>
 </div>
 
 <script>
-function submitListing(e) {
+document.getElementById("uploadForm").addEventListener("submit", function(e) {
   e.preventDefault();
-  alert("Listing submitted for review. (Manual approval in MVP)");
-}
+  document.getElementById("status").innerText =
+    "✅ Listing submitted. (Manual approval in MVP)";
+});
 </script>
 
 </body>
