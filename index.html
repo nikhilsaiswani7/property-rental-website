@@ -152,7 +152,7 @@ header h1 {
 </section>
 <div class="container">
 
-  <div class="card" data-county="Dublin" data-price="2100">
+<div class="card" data-county="Dublin" data-price="2100">
 
     <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
     <div class="card-content">
@@ -167,7 +167,8 @@ header h1 {
     </div>
   </div>
 
-  <div class="card" data-county="Galway" data-price="2500">
+  <div class="card" data-county="Galway" data-price="1800">
+
 
     <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c">
     <div class="card-content">
@@ -182,7 +183,7 @@ header h1 {
     </div>
   </div>
 
-  <div class="card" data-county="Cork" data-price="1300">
+<div class="card" data-county="Cork" data-price="1400">
 
     <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
     <div class="card-content">
@@ -221,7 +222,34 @@ function filterProperties() {
     card.style.display = show ? "block" : "none";
   });
 }
+<script>
+function filterProperties() {
+  const selectedCounty = document.getElementById("county").value;
+  const maxPrice = document.getElementById("maxPrice").value;
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    const cardCounty = card.getAttribute("data-county");
+    const cardPrice = card.getAttribute("data-price");
+
+    let show = true;
+
+    if (selectedCounty && selectedCounty !== "Nationwide" && cardCounty !== selectedCounty) {
+      show = false;
+    }
+
+    if (maxPrice && Number(cardPrice) > Number(maxPrice)) {
+      show = false;
+    }
+
+    card.style.display = show ? "block" : "none";
+  });
+}
 </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
