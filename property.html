@@ -7,7 +7,9 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+             Roboto, Helvetica, Arial, sans-serif;
+;
       margin: 0;
       background: #f5f7fa;
     }
@@ -124,12 +126,21 @@
     }
 
     /* ENQUIRY FORM */
-    .enquiry {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 30px;
-    }
+    .enquiry button {
+  background: #2563eb;
+  color: white;
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.enquiry button:hover {
+  background: #1e4fd6;
+}
+
 
     .enquiry input,
     .enquiry textarea {
@@ -161,6 +172,24 @@
       border-top: 1px solid #e5e7eb;
       padding-top: 15px;
     }
+    p {
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h3 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.section {
+  padding-top: 20px;
+  margin-top: 30px;
+  border-top: 1px solid #e5e7eb;
+}
+
   </style>
 </head>
 
@@ -215,7 +244,7 @@
   </div>
 
   <!-- DESCRIPTION -->
-  <h3>Description</h3>
+<h3 class="section">Description</h3>
   <p>
     Bright and modern two-bedroom apartment located in the heart of Dublin.
     Close to public transport, shops, and amenities. Ideal for professionals
@@ -223,7 +252,7 @@
   </p>
 
   <!-- AMENITIES -->
-  <h3>Amenities</h3>
+<h3 class="section">Amenities</h3>
   <ul class="amenities">
     <li>🚗 Parking available</li>
     <li>🔥 Gas central heating</li>
@@ -234,7 +263,7 @@
   </ul>
 
   <!-- ENQUIRY -->
-  <h3>Send an enquiry</h3>
+<h3 class="section">Send an enquiry</h3>
   <form class="enquiry">
     <input type="text" placeholder="Your name" required>
     <input type="email" placeholder="Your email" required>
