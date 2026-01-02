@@ -5,124 +5,111 @@
 <title>RentIreland.ie</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- Leaflet -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <style>
-:root {
-  --primary:#2563eb;
-  --bg:#f5f7fa;
-}
-
-* { box-sizing:border-box; }
-
 body {
-  margin:0;
-  font-family: system-ui, Arial, sans-serif;
-  background:var(--bg);
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, Helvetica, Arial, sans-serif;
+  background: #f5f7fa;
 }
 
 /* HEADER */
 header {
-  background:white;
-  padding:18px 30px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 2px 10px rgba(0,0,0,.05);
+  background: white;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
 }
 
 header h1 {
-  margin:0;
-  color:var(--primary);
+  margin: 0;
+  color: #2563eb;
 }
 
 /* SEARCH */
 .search-bar {
-  background:white;
-  padding:20px;
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
+  background: white;
+  padding: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .search-bar select,
 .search-bar input,
 .search-bar button {
-  padding:12px;
-  font-size:16px;
+  padding: 12px;
+  font-size: 16px;
 }
 
 .search-bar button {
-  background:var(--primary);
-  color:white;
-  border:none;
-  cursor:pointer;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
 /* MAP */
-.map {
-  margin:20px;
-  background:white;
-  border-radius:14px;
-  padding:25px;
+.map-section {
+  margin: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
 }
 
-.map-box {
-  height:380px;
-  background:#e5e7eb;
-  border-radius:14px;
-  position:relative;
+#map {
+  height: 450px;
+  border-radius: 14px;
+  margin-top: 15px;
 }
-
-.pin {
-  position:absolute;
-  background:var(--primary);
-  color:white;
-  padding:6px 10px;
-  border-radius:20px;
-  font-size:14px;
-}
-
-.dublin { top:45%; left:60%; }
-.cork { top:65%; left:45%; }
-.galway { top:50%; left:40%; }
 
 /* LISTINGS */
-.listings {
-  padding:20px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:20px;
+.container {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
 .card {
-  background:white;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
 }
 
 .card img {
-  width:100%;
-  height:200px;
-  object-fit:cover;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
 .card-content {
-  padding:15px;
+  padding: 15px;
 }
 
 .card-content h3 {
-  margin:0 0 5px;
+  margin: 0 0 5px;
 }
 
 .card-content a {
-  text-decoration:none;
-  color:black;
+  text-decoration: none;
+  color: black;
 }
 
 .price {
-  color:var(--primary);
-  font-weight:bold;
-  font-size:18px;
+  color: #2563eb;
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>
 </head>
@@ -134,37 +121,33 @@ header h1 {
   <strong>Find your next home</strong>
 </header>
 
+<!-- SEARCH -->
 <div class="search-bar">
   <select id="county">
     <option value="">County</option>
     <option>Dublin</option>
-    <option>Cork</option>
     <option>Galway</option>
-    <option>Limerick</option>
-    <option>Waterford</option>
+    <option>Cork</option>
     <option>Nationwide</option>
   </select>
 
   <input id="maxPrice" placeholder="Max rent (€)">
-  <button onclick="filter()">Search</button>
+  <button onclick="filterProperties()">Search</button>
 </div>
 
-<section class="map">
-  <h2>Search on the map</h2>
-  <p>Explore rentals across Ireland</p>
-  <div class="map-box">
-    <div class="pin dublin">Dublin</div>
-    <div class="pin cork">Cork</div>
-    <div class="pin galway">Galway</div>
-  </div>
+<!-- MAP -->
+<section class="map-section">
+  <h2>Search rentals on the map</h2>
+  <div id="map"></div>
 </section>
 
-<section class="listings">
+<!-- LISTINGS -->
+<div class="container">
 
   <div class="card" data-county="Dublin" data-price="2100">
     <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
     <div class="card-content">
-      <h3><a href="property.html">Modern 2-Bed Apartment</a></h3>
+      <h3><a href="property.html">Modern 2 Bed Apartment</a></h3>
       <p>Dublin City</p>
       <div class="price">€2,100 / month</div>
     </div>
@@ -182,25 +165,62 @@ header h1 {
   <div class="card" data-county="Cork" data-price="1400">
     <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
     <div class="card-content">
-      <h3><a href="property.html">Cozy 1-Bed</a></h3>
+      <h3><a href="property.html">Cozy 1 Bed</a></h3>
       <p>Cork City</p>
       <div class="price">€1,400 / month</div>
     </div>
   </div>
 
-</section>
+</div>
 
 <script>
-function filter() {
+/* FILTER */
+function filterProperties() {
   const county = document.getElementById("county").value;
-  const max = document.getElementById("maxPrice").value;
+  const maxPrice = document.getElementById("maxPrice").value;
   document.querySelectorAll(".card").forEach(card => {
     let show = true;
-    if (county && county !== "Nationwide" && card.dataset.county !== county) show = false;
-    if (max && Number(card.dataset.price) > Number(max)) show = false;
+    if (county && county !== "Nationwide" && card.dataset.county !== county)
+      show = false;
+    if (maxPrice && Number(card.dataset.price) > Number(maxPrice))
+      show = false;
     card.style.display = show ? "block" : "none";
   });
 }
+
+/* MAP */
+const map = L.map("map").setView([53.4129, -8.2439], 7);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "© OpenStreetMap contributors"
+}).addTo(map);
+
+const properties = [
+  {
+    title: "Modern 2 Bed Apartment",
+    lat: 53.3498,
+    lng: -6.2603,
+    url: "property.html"
+  },
+  {
+    title: "Bright City Apartment",
+    lat: 53.2707,
+    lng: -9.0568,
+    url: "property.html"
+  },
+  {
+    title: "Cozy 1 Bed",
+    lat: 51.8985,
+    lng: -8.4756,
+    url: "property.html"
+  }
+];
+
+properties.forEach(p => {
+  L.marker([p.lat, p.lng])
+    .addTo(map)
+    .bindPopup(`<strong>${p.title}</strong><br><a href="${p.url}">View property</a>`);
+});
 </script>
 
 </body>
