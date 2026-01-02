@@ -18,6 +18,7 @@ body {
   background: #f5f7fa;
 }
 
+/* HEADER */
 header {
   background: white;
   padding: 20px;
@@ -37,12 +38,37 @@ header a {
   font-weight: bold;
 }
 
+/* SEARCH BAR */
+.search-bar {
+  background: white;
+  padding: 15px 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.search-bar select,
+.search-bar input,
+.search-bar button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.search-bar button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* MAP */
 #map {
   height: 450px;
   margin: 20px;
   border-radius: 12px;
 }
 
+/* LISTINGS */
 .container {
   padding: 20px;
   display: grid;
@@ -80,20 +106,36 @@ header a {
   <a href="upload.html">+ Add Listing</a>
 </header>
 
+<!-- SEARCH -->
+<div class="search-bar">
+  <select id="county">
+    <option value="">All counties</option>
+    <option>Dublin</option>
+    <option>Galway</option>
+    <option>Cork</option>
+  </select>
+
+  <input id="maxPrice" type="number" placeholder="Max rent (€)">
+  <button onclick="applyFilters()">Search</button>
+</div>
+
+<!-- MAP -->
 <div id="map"></div>
 
+<!-- LISTINGS -->
 <div class="container" id="listings"></div>
 
-<!-- Leaflet JS (AFTER map div) -->
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 /* =========================
-   PROPERTY DATA (3 LISTINGS)
+   PROPERTY DATA (SOURCE)
 ========================= */
 const properties = [
   {
     title: "Modern 2 Bed Apartment",
+    county: "Dublin",
     price: 2100,
     lat: 53.3498,
     lng: -6.2603,
@@ -102,6 +144,7 @@ const properties = [
   },
   {
     title: "Galway City Apartment",
+    county: "Galway",
     price: 1800,
     lat: 53.2707,
     lng: -9.0568,
@@ -110,6 +153,7 @@ const properties = [
   },
   {
     title: "Cozy 1 Bed",
+    county: "Cork",
     price: 1400,
     lat: 51.8985,
     lng: -8.4756,
@@ -119,16 +163,13 @@ const properties = [
 ];
 
 /* =========================
-   MAP — SAFE IRELAND FOCUS
+   MAP (UNCHANGED & STABLE)
 ========================= */
-
-// Ireland bounds
 const irelandBounds = L.latLngBounds(
-  [51.3, -10.6], // South-West
-  [55.5, -5.3]   // North-East
+  [51.3, -10.6],
+  [55.5, -5.3]
 );
 
-// Create map
 const map = L.map("map", {
   maxBounds: irelandBounds,
   maxBoundsViscosity: 1.0,
@@ -136,40 +177,58 @@ const map = L.map("map", {
   maxZoom: 13
 });
 
-// Fit map to Ireland
 map.fitBounds(irelandBounds);
 
-// Tile layer (no wrap prevents world repetition)
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "© OpenStreetMap contributors",
   noWrap: true
 }).addTo(map);
 
+/* MAP MARKERS (STATIC FOR NOW) */
+properties.forEach(p => {
+  L.marker([p.lat, p.lng])
+    .addTo(map)
+    .bindPopup(`<strong>${p.title}</strong><br><a href="${p.url}">View</a>`);
+});
+
 /* =========================
-   RENDER LISTINGS + PINS
+   LISTINGS RENDER
 ========================= */
 const listings = document.getElementById("listings");
 
-properties.forEach(p => {
-  // Listing card
-  listings.innerHTML += `
-    <div class="card">
-      <img src="${p.img}">
-      <div class="card-content">
-        <h3><a href="${p.url}">${p.title}</a></h3>
-        <div class="price">€${p.price} / month</div>
+function renderListings(list) {
+  listings.innerHTML = "";
+  list.forEach(p => {
+    listings.innerHTML += `
+      <div class="card">
+        <img src="${p.img}">
+        <div class="card-content">
+          <h3><a href="${p.url}">${p.title}</a></h3>
+          <p>${p.county}</p>
+          <div class="price">€${p.price} / month</div>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  });
+}
 
-  // Map marker
-  L.marker([p.lat, p.lng])
-    .addTo(map)
-    .bindPopup(
-      `<strong>${p.title}</strong><br>
-       <a href="${p.url}">View property</a>`
-    );
-});
+/* =========================
+   FILTERS (CARDS ONLY)
+========================= */
+function applyFilters() {
+  const county = document.getElementById("county").value;
+  const maxPrice = document.getElementById("maxPrice").value;
+
+  const filtered = properties.filter(p =>
+    (!county || p.county === county) &&
+    (!maxPrice || p.price <= maxPrice)
+  );
+
+  renderListings(filtered);
+}
+
+/* INITIAL LOAD */
+renderListings(properties);
 </script>
 
 </body>
