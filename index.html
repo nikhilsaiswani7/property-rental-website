@@ -178,6 +178,7 @@ header h1 {
 function filterProperties() {
   const county = document.getElementById("county").value;
   const maxPrice = document.getElementById("maxPrice").value;
+
   document.querySelectorAll(".card").forEach(card => {
     let show = true;
     if (county && county !== "Nationwide" && card.dataset.county !== county)
@@ -188,22 +189,42 @@ function filterProperties() {
   });
 }
 
-/* MAP */
-const irelandBounds = [
+/* =========================
+   IRELAND-LOCKED MAP
+========================= */
+
+// Ireland bounds
+const irelandBounds = L.latLngBounds(
   [51.3, -10.6], // South-West
   [55.5, -5.3]   // North-East
-];
+);
 
+// Create map
 const map = L.map("map", {
   maxBounds: irelandBounds,
-  maxBoundsViscosity: 1.0, // prevents dragging outside
-  minZoom: 6,
-  maxZoom: 13
-}).fitBounds(irelandBounds);
+  maxBoundsViscosity: 1.0,
+  zoomControl: true,
+  worldCopyJump: false
+});
+
+// Disable world wrapping
+map.options.crs.wrapLng = false;
+map.options.crs.wrapLat = false;
+
+// Fit map to Ireland
+map.fitBounds(irelandBounds);
+
+// Lock minimum zoom
+map.setMinZoom(map.getZoom());
+map.setMaxZoom(13);
+
+// Tiles (no wrap)
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap contributors"
+  attribution: "© OpenStreetMap contributors",
+  noWrap: true
 }).addTo(map);
 
+// Properties
 const properties = [
   {
     title: "Modern 2 Bed Apartment",
@@ -225,10 +246,14 @@ const properties = [
   }
 ];
 
+// Add markers
 properties.forEach(p => {
   L.marker([p.lat, p.lng])
     .addTo(map)
-    .bindPopup(`<strong>${p.title}</strong><br><a href="${p.url}">View property</a>`);
+    .bindPopup(
+      `<strong>${p.title}</strong><br>
+       <a href="${p.url}">View property</a>`
+    );
 });
 </script>
 
