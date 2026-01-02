@@ -121,7 +121,7 @@ header h1 {
 </header>
 
 <div class="search-bar">
-  <select>
+<select id="county">
   <option value="">Select County</option>
   <option>Dublin</option>
   <option>Cork</option>
@@ -130,6 +130,10 @@ header h1 {
   <option>Waterford</option>
   <option>Nationwide</option>
 </select>
+
+<input id="maxPrice" placeholder="Max Price (€)">
+<button onclick="filterProperties()">Search</button>
+
 
   <input placeholder="Max Price">
   <button>Search</button>
@@ -146,7 +150,8 @@ header h1 {
 </section>
 <div class="container">
 
-  <div class="card">
+  <div class="card" data-county="Dublin" data-price="2100">
+
     <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
     <div class="card-content">
       <h3>
@@ -160,7 +165,8 @@ header h1 {
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" data-county="Galway" data-price="2500">
+
     <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c">
     <div class="card-content">
       <h3>
@@ -174,7 +180,8 @@ header h1 {
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" data-county="Cork" data-price="1300">
+
     <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
     <div class="card-content">
      <h3>
@@ -189,6 +196,30 @@ header h1 {
   </div>
 
 </div>
+<script>
+function filterProperties() {
+  const selectedCounty = document.getElementById("county").value;
+  const maxPrice = document.getElementById("maxPrice").value;
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    const cardCounty = card.getAttribute("data-county");
+    const cardPrice = card.getAttribute("data-price");
+
+    let show = true;
+
+    if (selectedCounty && selectedCounty !== "Nationwide" && cardCounty !== selectedCounty) {
+      show = false;
+    }
+
+    if (maxPrice && Number(cardPrice) > Number(maxPrice)) {
+      show = false;
+    }
+
+    card.style.display = show ? "block" : "none";
+  });
+}
+</script>
 
 </body>
 </html>
