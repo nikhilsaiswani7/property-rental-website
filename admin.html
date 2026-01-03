@@ -12,6 +12,35 @@ body {
   background: #f5f7fa;
 }
 
+/* LOGIN */
+.login {
+  max-width: 400px;
+  margin: 120px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.login input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.login button {
+  margin-top: 15px;
+  padding: 12px;
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* ADMIN */
 header {
   background: white;
   padding: 20px;
@@ -57,7 +86,7 @@ header h1 {
   font-size: 14px;
 }
 
-button {
+button.danger {
   background: #dc2626;
   color: white;
   border: none;
@@ -74,6 +103,17 @@ button {
 </head>
 
 <body>
+
+<!-- LOGIN SCREEN -->
+<div class="login" id="loginBox">
+  <h2>Admin Login</h2>
+  <input id="password" type="password" placeholder="Enter admin password">
+  <button onclick="login()">Login</button>
+  <p id="error" style="color:red;"></p>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;">
 
 <header>
   <h1>Admin Panel</h1>
@@ -94,8 +134,38 @@ button {
   </div>
 
 </div>
+</div>
 
 <script>
+/* =========================
+   CONFIG — CHANGE THIS
+========================= */
+const ADMIN_PASSWORD = "admin123"; // <-- change this
+
+/* =========================
+   LOGIN LOGIC
+========================= */
+function login() {
+  const input = document.getElementById("password").value;
+
+  if (input === ADMIN_PASSWORD) {
+    sessionStorage.setItem("admin-auth", "true");
+    showAdmin();
+  } else {
+    document.getElementById("error").innerText = "Incorrect password";
+  }
+}
+
+function showAdmin() {
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("adminPanel").style.display = "block";
+}
+
+/* Auto-login if already authenticated */
+if (sessionStorage.getItem("admin-auth") === "true") {
+  showAdmin();
+}
+
 /* =========================
    LOAD LISTINGS
 ========================= */
@@ -110,23 +180,19 @@ const allListings = [...seedListings, ...userListings];
 
 const listingsBox = document.getElementById("listings");
 
-if (allListings.length === 0) {
-  listingsBox.innerHTML = "<p>No listings found.</p>";
-} else {
-  allListings.forEach(l => {
-    listingsBox.innerHTML += `
-      <div class="listing">
-        <strong>${l.title}</strong>
-        <div class="meta">ID: ${l.id}</div>
-        ${
-          l.id.startsWith("user-")
-            ? `<button onclick="deleteListing('${l.id}')">Delete listing</button>`
-            : `<div class="small meta">Seed listing (cannot delete)</div>`
-        }
-      </div>
-    `;
-  });
-}
+allListings.forEach(l => {
+  listingsBox.innerHTML += `
+    <div class="listing">
+      <strong>${l.title}</strong>
+      <div class="meta">ID: ${l.id}</div>
+      ${
+        l.id.startsWith("user-")
+          ? `<button class="danger" onclick="deleteListing('${l.id}')">Delete listing</button>`
+          : `<div class="small meta">Seed listing (protected)</div>`
+      }
+    </div>
+  `;
+});
 
 /* =========================
    LOAD ENQUIRIES
@@ -152,7 +218,7 @@ function renderEnquiries() {
           <div class="meta">${new Date(e.date).toLocaleString()}</div>
           <p><strong>${e.name}</strong> (${e.email})</p>
           <p>${e.message}</p>
-          <button onclick="deleteEnquiry(${i})">Delete enquiry</button>
+          <button class="danger" onclick="deleteEnquiry(${i})">Delete enquiry</button>
         </div>
       `;
     });
