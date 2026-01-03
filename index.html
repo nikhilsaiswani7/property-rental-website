@@ -8,98 +8,39 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
-}
+body { margin:0; font-family:Arial,sans-serif; background:#f5f7fa; }
+header { background:white; padding:20px; display:flex; justify-content:space-between; }
+header h1 { margin:0; color:#2563eb; }
+header a { color:#2563eb; font-weight:bold; text-decoration:none; }
 
-header {
-  background: white;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.search-bar { background:white; padding:15px; display:flex; gap:10px; flex-wrap:wrap; }
+.search-bar input, .search-bar select, .search-bar button {
+  padding:10px; font-size:16px;
 }
+.search-bar button { background:#2563eb; color:white; border:none; cursor:pointer; }
 
-header h1 {
-  margin: 0;
-  color: #2563eb;
-}
+#map { height:400px; margin:20px; border-radius:12px; }
 
-header a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* SEARCH BAR */
-.search-bar {
-  background: white;
-  padding: 15px 20px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.search-bar select,
-.search-bar input,
-.search-bar button {
-  padding: 10px;
-  font-size: 16px;
-}
-
-.search-bar button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-/* MAP */
-#map {
-  height: 450px;
-  margin: 20px;
-  border-radius: 12px;
-}
-
-/* LISTINGS */
 .container {
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
 }
 
-.card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-}
+.card { background:white; border-radius:12px; overflow:hidden; }
+.card img { width:100%; height:200px; object-fit:cover; }
+.card-content { padding:15px; }
+.price { color:#2563eb; font-weight:bold; }
 
-.card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.card-content {
-  padding: 15px;
-}
-
-.price {
-  color: #2563eb;
-  font-weight: bold;
-}
-
-.delete-btn {
-  margin-top: 10px;
-  background: #dc2626;
-  color: white;
-  border: none;
-  padding: 8px;
-  border-radius: 6px;
-  cursor: pointer;
+.delete {
+  margin-top:10px;
+  background:#dc2626;
+  color:white;
+  border:none;
+  padding:8px;
+  border-radius:6px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -128,138 +69,66 @@ header a {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-/* =========================
-   SEED / DEMO LISTINGS
-========================= */
+/* SEED LISTINGS */
 const seedListings = [
-  {
-    id: "seed-1",
-    title: "Modern 2 Bed Apartment",
-    county: "Dublin",
-    price: 2100,
-    lat: 53.3498,
-    lng: -6.2603,
-    img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-  },
-  {
-    id: "seed-2",
-    title: "Galway City Apartment",
-    county: "Galway",
-    price: 1800,
-    lat: 53.2707,
-    lng: -9.0568,
-    img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c"
-  },
-  {
-    id: "seed-3",
-    title: "Cozy 1 Bed",
-    county: "Cork",
-    price: 1400,
-    lat: 51.8985,
-    lng: -8.4756,
-    img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511"
-  }
+  { id:"seed-1", title:"Modern 2 Bed Apartment", county:"Dublin", price:2100, lat:53.3498, lng:-6.2603,
+    img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994" },
+  { id:"seed-2", title:"Galway City Apartment", county:"Galway", price:1800, lat:53.2707, lng:-9.0568,
+    img:"https://images.unsplash.com/photo-1572120360610-d971b9d7767c" },
+  { id:"seed-3", title:"Cozy 1 Bed", county:"Cork", price:1400, lat:51.8985, lng:-8.4756,
+    img:"https://images.unsplash.com/photo-1505691938895-1758d7feb511" }
 ];
 
-/* =========================
-   LOAD USER LISTINGS
-========================= */
 let userListings = JSON.parse(localStorage.getItem("listings")) || [];
-
-/* MERGE BOTH */
 let properties = [...seedListings, ...userListings];
 
-/* =========================
-   MAP (STABLE)
-========================= */
-const irelandBounds = L.latLngBounds([51.3,-10.6],[55.5,-5.3]);
+/* MAP */
 const map = L.map("map", {
-  maxBounds: irelandBounds,
-  maxBoundsViscosity: 1.0,
-  minZoom: 6,
-  maxZoom: 13
+  maxBounds: [[51.3,-10.6],[55.5,-5.3]],
+  maxBoundsViscosity:1,
+  minZoom:6,
+  maxZoom:13
 });
-map.fitBounds(irelandBounds);
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap",
-  noWrap: true
-}).addTo(map);
-
+map.fitBounds([[51.3,-10.6],[55.5,-5.3]]);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { noWrap:true }).addTo(map);
 let markers = [];
 
-/* =========================
-   RENDER FUNCTION
-========================= */
-function render(list) {
-  const listings = document.getElementById("listings");
-  listings.innerHTML = "";
+/* RENDER */
+function render(list){
+  const box = document.getElementById("listings");
+  box.innerHTML="";
+  markers.forEach(m=>map.removeLayer(m));
+  markers=[];
 
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
-
-  list.forEach(p => {
-    listings.innerHTML += `
+  list.forEach(p=>{
+    box.innerHTML+=`
       <div class="card">
         <img src="${p.img}">
         <div class="card-content">
-          <h3>
-  <a href="property.html?id=${p.id}" style="text-decoration:none;color:black;">
-    ${p.title}
-  </a>
-</h3>
-
+          <h3><a href="property.html?id=${p.id}" style="text-decoration:none;color:black">${p.title}</a></h3>
           <p>${p.county}</p>
           <div class="price">€${p.price} / month</div>
-
-          ${
-            p.id.startsWith("user-")
-              ? `<button class="delete-btn" onclick="deleteListing('${p.id}')">
-                   Delete listing
-                 </button>`
-              : ""
-          }
+          ${p.id.startsWith("user-") ? `<button class="delete" onclick="deleteListing('${p.id}')">Delete</button>` : ""}
         </div>
-      </div>
-    `;
-
-    const marker = L.marker([p.lat, p.lng])
-      .addTo(map)
-      .bindPopup(`<strong>${p.title}</strong>`);
-
-    markers.push(marker);
+      </div>`;
+    markers.push(L.marker([p.lat,p.lng]).addTo(map));
   });
 }
 
-/* =========================
-   FILTERS
-========================= */
-function applyFilters() {
-  const county = document.getElementById("county").value;
-  const maxPrice = document.getElementById("maxPrice").value;
-
-  const filtered = properties.filter(p =>
-    (!county || p.county === county) &&
-    (!maxPrice || p.price <= maxPrice)
-  );
-
-  render(filtered);
+function applyFilters(){
+  const c=document.getElementById("county").value;
+  const p=document.getElementById("maxPrice").value;
+  render(properties.filter(x=>(!c||x.county===c)&&(!p||x.price<=p)));
 }
 
-/* =========================
-   DELETE LISTING (USER ONLY)
-========================= */
-function deleteListing(id) {
-  userListings = userListings.filter(l => l.id !== id);
-  localStorage.setItem("listings", JSON.stringify(userListings));
-
-  properties = [...seedListings, ...userListings];
+function deleteListing(id){
+  userListings=userListings.filter(l=>l.id!==id);
+  localStorage.setItem("listings",JSON.stringify(userListings));
+  properties=[...seedListings,...userListings];
   render(properties);
 }
 
-/* INIT */
 render(properties);
 </script>
-
 </body>
 </html>
