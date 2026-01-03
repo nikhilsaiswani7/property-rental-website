@@ -1,95 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Add Listing | RentIreland</title>
+<title>Add Listing</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
-body {
-  background: #f5f7fa;
-  font-family: Arial, sans-serif;
-}
-
-.container {
-  max-width: 600px;
-  margin: 40px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-}
-
-input, textarea, select, button {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 12px;
-  font-size: 16px;
-}
-
-textarea {
-  min-height: 140px;
-}
-
-button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 8px;
-}
+body { font-family:Arial; background:#f5f7fa; }
+.container { max-width:600px; margin:40px auto; background:white; padding:20px; border-radius:12px; }
+input,select,textarea,button { width:100%; padding:12px; margin-bottom:10px; }
+button { background:#2563eb; color:white; border:none; cursor:pointer; }
 </style>
 </head>
 
 <body>
-
 <div class="container">
-  <h1>Add a Rental Listing</h1>
-
-  <form id="listingForm">
-    <input id="title" placeholder="Property title" required>
-    <select id="county" required>
-      <option value="">County</option>
-      <option>Dublin</option>
-      <option>Galway</option>
-      <option>Cork</option>
-    </select>
-    <input id="price" type="number" placeholder="Monthly rent (€)" required>
-    <input id="image" placeholder="Image URL" required>
-    <input id="lat" placeholder="Latitude (e.g. 53.3498)" required>
-    <input id="lng" placeholder="Longitude (e.g. -6.2603)" required>
-    <textarea id="description" placeholder="Description" required></textarea>
-
-    <button type="submit">Save Listing</button>
-  </form>
-
-  <p id="status"></p>
+<h2>Add Listing</h2>
+<form id="form">
+<input id="title" placeholder="Title" required>
+<select id="county"><option>Dublin</option><option>Galway</option><option>Cork</option></select>
+<input id="price" type="number" placeholder="Price" required>
+<input id="img" placeholder="Image URL" required>
+<input id="lat" placeholder="Latitude" required>
+<input id="lng" placeholder="Longitude" required>
+<textarea id="desc" placeholder="Description"></textarea>
+<button>Add</button>
+</form>
+<p id="msg"></p>
 </div>
 
 <script>
-document.getElementById("listingForm").addEventListener("submit", function(e) {
+document.getElementById("form").onsubmit=e=>{
   e.preventDefault();
-
-  const listing = {
-  id: "user-" + Date.now(),   // unique ID
-  title: title.value,
-  county: county.value,
-  price: Number(price.value),
-  img: image.value,
-  lat: Number(lat.value),
-  lng: Number(lng.value),
-  description: description.value
+  const listing={
+    id:"user-"+Date.now(),
+    title:title.value,
+    county:county.value,
+    price:+price.value,
+    img:img.value,
+    lat:+lat.value,
+    lng:+lng.value,
+    description:desc.value
+  };
+  const list=JSON.parse(localStorage.getItem("listings"))||[];
+  list.push(listing);
+  localStorage.setItem("listings",JSON.stringify(list));
+  msg.innerText="Saved. Go back to homepage.";
+  e.target.reset();
 };
-
-  const existing = JSON.parse(localStorage.getItem("listings")) || [];
-  existing.push(listing);
-  localStorage.setItem("listings", JSON.stringify(existing));
-
-  document.getElementById("status").innerText =
-    "✅ Listing saved! Go back to homepage to view it.";
-
-  this.reset();
-});
 </script>
-
 </body>
 </html>
