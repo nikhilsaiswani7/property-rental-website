@@ -203,7 +203,12 @@ function render(list) {
       <div class="card">
         <img src="${p.img}">
         <div class="card-content">
-          <h3>${p.title}</h3>
+          <h3>
+  <a href="property.html?id=${p.id}" style="text-decoration:none;color:black;">
+    ${p.title}
+  </a>
+</h3>
+
           <p>${p.county}</p>
           <div class="price">€${p.price} / month</div>
 
