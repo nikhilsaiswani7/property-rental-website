@@ -1,47 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>RentIreland</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-
 <style>
-body { margin:0; font-family:Arial,sans-serif; background:#f5f7fa; }
-header { background:white; padding:20px; display:flex; justify-content:space-between; }
-header h1 { margin:0; color:#2563eb; }
-header a { color:#2563eb; font-weight:bold; text-decoration:none; }
-
-.search-bar { background:white; padding:15px; display:flex; gap:10px; flex-wrap:wrap; }
-.search-bar input, .search-bar select, .search-bar button {
-  padding:10px; font-size:16px;
-}
-.search-bar button { background:#2563eb; color:white; border:none; cursor:pointer; }
-
-#map { height:400px; margin:20px; border-radius:12px; }
-
-.container {
-  padding:20px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:20px;
-}
-
+body { font-family: Arial; background:#f5f7fa; margin:0; }
+header { background:white; padding:20px; }
+.container { padding:20px; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
 .card { background:white; border-radius:12px; overflow:hidden; }
 .card img { width:100%; height:200px; object-fit:cover; }
 .card-content { padding:15px; }
 .price { color:#2563eb; font-weight:bold; }
-
-.delete {
-  margin-top:10px;
-  background:#dc2626;
-  color:white;
-  border:none;
-  padding:8px;
-  border-radius:6px;
-  cursor:pointer;
-}
 </style>
 </head>
 
@@ -49,115 +19,50 @@ header a { color:#2563eb; font-weight:bold; text-decoration:none; }
 
 <header>
   <h1>RentIreland</h1>
-  <a href="upload.html">+ Add Listing</a>
 </header>
 
-<div class="search-bar">
-  <select id="county">
-    <option value="">All counties</option>
-    <option>Dublin</option>
-    <option>Galway</option>
-    <option>Cork</option>
-  </select>
-  <input id="maxPrice" type="number" placeholder="Max rent (€)">
-  <button onclick="applyFilters()">Search</button>
-</div>
-
-<div id="map"></div>
 <div class="container" id="listings"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
-/* SEED LISTINGS */
-const seedListings = [
+const listings = [
   {
     id:"seed-1",
     title:"Modern 2 Bed Apartment",
     county:"Dublin",
     price:2100,
-    lat:53.3498,
-    lng:-6.2603,
     img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-    description:"Bright and modern two-bedroom apartment located in Dublin city centre. Close to transport and amenities."
+    description:"Bright and modern apartment in Dublin city centre."
   },
   {
     id:"seed-2",
     title:"Galway City Apartment",
     county:"Galway",
     price:1800,
-    lat:53.2707,
-    lng:-9.0568,
     img:"https://images.unsplash.com/photo-1572120360610-d971b9d7767c",
-    description:"Comfortable apartment in Galway city, ideal for professionals and students."
-  },
-  {
-    id:"seed-3",
-    title:"Cozy 1 Bed",
-    county:"Cork",
-    price:1400,
-    lat:51.8985,
-    lng:-8.4756,
-    img:"https://images.unsplash.com/photo-1505691938895-1758d7feb511",
-    description:"Cozy one-bedroom property located close to Cork city centre."
+    description:"Comfortable apartment in Galway city."
   }
 ];
-];
 
-let userListings = JSON.parse(localStorage.getItem("listings")) || [];
-let properties = [...seedListings, ...userListings];
+const box = document.getElementById("listings");
 
-/* MAP */
-const map = L.map("map", {
-  maxBounds: [[51.3,-10.6],[55.5,-5.3]],
-  maxBoundsViscosity:1,
-  minZoom:6,
-  maxZoom:13
+listings.forEach(p => {
+  box.innerHTML += `
+    <div class="card">
+      <img src="${p.img}">
+      <div class="card-content">
+        <h3>
+          <a href="property.html?id=${p.id}" style="text-decoration:none;color:black">
+            ${p.title}
+          </a>
+        </h3>
+        <p>${p.county}</p>
+        <div class="price">€${p.price} / month</div>
+        <p>${p.description}</p>
+      </div>
+    </div>
+  `;
 });
-map.fitBounds([[51.3,-10.6],[55.5,-5.3]]);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { noWrap:true }).addTo(map);
-let markers = [];
-
-/* RENDER */
-function render(list){
-  const box = document.getElementById("listings");
-  box.innerHTML="";
-  markers.forEach(m=>map.removeLayer(m));
-  markers=[];
-
-  list.forEach(p=>{
-    box.innerHTML+=`
-      <div class="card">
-        <img src="${p.img}">
-        <div class="card-content">
-          <h3><a href="property.html?id=${p.id}" style="text-decoration:none;color:black">${p.title}</a></h3>
-          <p>${p.county}</p>
-          <div class="price">€${p.price} / month</div>
-<p style="color:#555;font-size:14px;">
-  ${(p.description || "").slice(0, 80)}${p.description && p.description.length > 80 ? "..." : ""}
-</p>
-
-          ${p.id.startsWith("user-") ? `<button class="delete" onclick="deleteListing('${p.id}')">Delete</button>` : ""}
-        </div>
-      </div>`;
-    markers.push(L.marker([p.lat,p.lng]).addTo(map));
-  });
-}
-
-function applyFilters(){
-  const c=document.getElementById("county").value;
-  const p=document.getElementById("maxPrice").value;
-  render(properties.filter(x=>(!c||x.county===c)&&(!p||x.price<=p)));
-}
-
-function deleteListing(id){
-  userListings=userListings.filter(l=>l.id!==id);
-  localStorage.setItem("listings",JSON.stringify(userListings));
-  properties=[...seedListings,...userListings];
-  render(properties);
-}
-
-render(properties);
 </script>
+
 </body>
 </html>
