@@ -51,25 +51,31 @@ header {
 <div class="container" id="inbox"></div>
 
 <script>
-const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
 const inbox = document.getElementById("inbox");
+const enquiriesRaw = localStorage.getItem("enquiries");
+
+console.log("RAW enquiries:", enquiriesRaw);
+
+const enquiries = enquiriesRaw ? JSON.parse(enquiriesRaw) : [];
 
 if (enquiries.length === 0) {
-  inbox.innerHTML = "<p>No enquiries yet.</p>";
+  inbox.innerHTML = "<p>No enquiries found.</p>";
 } else {
-  enquiries.reverse().forEach(e => {
-    inbox.innerHTML += `
-      <div class="enquiry">
-        <strong>${e.propertyTitle}</strong>
-        <div class="meta">${new Date(e.date).toLocaleString()}</div>
-        <p><strong>${e.name}</strong> (${e.email})</p>
-        <p>${e.message}</p>
-      </div>
-    `;
-  });
+  enquiries
+    .slice()
+    .reverse()
+    .forEach(e => {
+      inbox.innerHTML += `
+        <div class="enquiry">
+          <strong>${e.propertyTitle}</strong>
+          <div class="meta">${new Date(e.date).toLocaleString()}</div>
+          <p><strong>${e.name}</strong> (${e.email})</p>
+          <p>${e.message}</p>
+        </div>
+      `;
+    });
 }
 </script>
 
 </body>
 </html>
-
