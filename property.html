@@ -1,189 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Property Details | RentIreland</title>
+<title>Property</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
-}
-
-header {
-  background: white;
-  padding: 20px;
-  border-bottom: 1px solid #eee;
-}
-
-header a {
-  text-decoration: none;
-  color: #2563eb;
-  font-weight: bold;
-}
-
-.container {
-  max-width: 900px;
-  margin: 30px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-}
-
-img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 20px;
-}
-
-.price {
-  color: #2563eb;
-  font-size: 26px;
-  font-weight: bold;
-}
-
-.meta {
-  color: #555;
-  margin-bottom: 15px;
-}
-
-.enquiry {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.enquiry input,
-.enquiry textarea {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-}
-
-.enquiry textarea {
-  min-height: 140px;
-}
-
-.enquiry button {
-  background: #2563eb;
-  color: white;
-  padding: 14px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.success {
-  margin-top: 15px;
-  color: green;
-}
+body { font-family:Arial; background:#f5f7fa; }
+.container { max-width:900px; margin:30px auto; background:white; padding:20px; border-radius:12px; }
+img { width:100%; height:400px; object-fit:cover; border-radius:12px; }
+.price { color:#2563eb; font-size:24px; font-weight:bold; }
+form { margin-top:20px; display:flex; flex-direction:column; gap:10px; }
+input,textarea,button { padding:12px; font-size:16px; }
+button { background:#2563eb; color:white; border:none; }
 </style>
 </head>
 
 <body>
-
-<header>
-  <a href="index.html">← Back to listings</a>
-</header>
-
-<div class="container" id="property"></div>
+<div class="container" id="box"></div>
 
 <script>
-/* =========================
-   LOAD PROPERTY
-========================= */
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
-const seedListings = [
-  {
-    id: "seed-1",
-    title: "Modern 2 Bed Apartment",
-    county: "Dublin",
-    price: 2100,
-    img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-    description: "Bright and modern two-bedroom apartment in Dublin city centre."
-  },
-  {
-    id: "seed-2",
-    title: "Galway City Apartment",
-    county: "Galway",
-    price: 1800,
-    img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c",
-    description: "Comfortable apartment in Galway city."
-  },
-  {
-    id: "seed-3",
-    title: "Cozy 1 Bed",
-    county: "Cork",
-    price: 1400,
-    img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
-    description: "Cozy one-bedroom property in Cork."
-  }
+const id=new URLSearchParams(location.search).get("id");
+const seed=[
+  {id:"seed-1",title:"Modern 2 Bed Apartment",county:"Dublin",price:2100,img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994",description:"Bright apartment"},
+  {id:"seed-2",title:"Galway City Apartment",county:"Galway",price:1800,img:"https://images.unsplash.com/photo-1572120360610-d971b9d7767c",description:"City apartment"},
+  {id:"seed-3",title:"Cozy 1 Bed",county:"Cork",price:1400,img:"https://images.unsplash.com/photo-1505691938895-1758d7feb511",description:"Cozy home"}
 ];
+const users=JSON.parse(localStorage.getItem("listings"))||[];
+const all=[...seed,...users];
+const p=all.find(x=>x.id===id);
 
-const userListings = JSON.parse(localStorage.getItem("listings")) || [];
-const allListings = [...seedListings, ...userListings];
+if(!p){ box.innerHTML="Not found"; throw ""; }
 
-const property = allListings.find(p => p.id === id);
-const container = document.getElementById("property");
+box.innerHTML=`
+<img src="${p.img}">
+<h1>${p.title}</h1>
+<p>${p.county}</p>
+<div class="price">€${p.price}</div>
+<p>${p.description||""}</p>
 
-if (!property) {
-  container.innerHTML = "<p>Property not found.</p>";
-  throw new Error("Property not found");
-}
-
-container.innerHTML = `
-  <img src="${property.img}">
-  <h1>${property.title}</h1>
-  <div class="meta">${property.county}</div>
-  <div class="price">€${property.price} / month</div>
-  <p>${property.description || ""}</p>
-
-  <h3>Send an enquiry</h3>
-
-  <form class="enquiry" id="enquiryForm">
-    <input id="name" placeholder="Your name" required>
-    <input id="email" type="email" placeholder="Your email" required>
-    <textarea id="message" placeholder="Your message" required></textarea>
-    <button type="submit">Send Enquiry</button>
-  </form>
-
-  <div class="success" id="success"></div>
+<form id="enq">
+<input id="n" placeholder="Name" required>
+<input id="e" type="email" placeholder="Email" required>
+<textarea id="m" placeholder="Message"></textarea>
+<button>Send enquiry</button>
+</form>
+<p id="ok"></p>
 `;
 
-/* =========================
-   SAVE ENQUIRY
-========================= */
-document.getElementById("enquiryForm").addEventListener("submit", function(e) {
+enq.onsubmit=e=>{
   e.preventDefault();
-
-  const enquiry = {
-    propertyId: id,
-    propertyTitle: property.title,
-    name: name.value,
-    email: email.value,
-    message: message.value,
-    date: new Date().toISOString()
-  };
-
-  const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
-  enquiries.push(enquiry);
-  localStorage.setItem("enquiries", JSON.stringify(enquiries));
-
-  document.getElementById("success").innerText =
-    "✅ Enquiry sent successfully.";
-
-  this.reset();
-});
+  const arr=JSON.parse(localStorage.getItem("enquiries"))||[];
+  arr.push({propertyId:id,title:p.title,name:n.value,email:e.value,message:m.value,date:new Date()});
+  localStorage.setItem("enquiries",JSON.stringify(arr));
+  ok.innerText="Enquiry sent";
+  e.target.reset();
+};
 </script>
-
 </body>
 </html>
