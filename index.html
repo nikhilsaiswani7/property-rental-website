@@ -71,12 +71,37 @@ header a { color:#2563eb; font-weight:bold; text-decoration:none; }
 <script>
 /* SEED LISTINGS */
 const seedListings = [
-  { id:"seed-1", title:"Modern 2 Bed Apartment", county:"Dublin", price:2100, lat:53.3498, lng:-6.2603,
-    img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994" },
-  { id:"seed-2", title:"Galway City Apartment", county:"Galway", price:1800, lat:53.2707, lng:-9.0568,
-    img:"https://images.unsplash.com/photo-1572120360610-d971b9d7767c" },
-  { id:"seed-3", title:"Cozy 1 Bed", county:"Cork", price:1400, lat:51.8985, lng:-8.4756,
-    img:"https://images.unsplash.com/photo-1505691938895-1758d7feb511" }
+  {
+    id:"seed-1",
+    title:"Modern 2 Bed Apartment",
+    county:"Dublin",
+    price:2100,
+    lat:53.3498,
+    lng:-6.2603,
+    img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994",
+    description:"Bright and modern two-bedroom apartment located in Dublin city centre. Close to transport and amenities."
+  },
+  {
+    id:"seed-2",
+    title:"Galway City Apartment",
+    county:"Galway",
+    price:1800,
+    lat:53.2707,
+    lng:-9.0568,
+    img:"https://images.unsplash.com/photo-1572120360610-d971b9d7767c",
+    description:"Comfortable apartment in Galway city, ideal for professionals and students."
+  },
+  {
+    id:"seed-3",
+    title:"Cozy 1 Bed",
+    county:"Cork",
+    price:1400,
+    lat:51.8985,
+    lng:-8.4756,
+    img:"https://images.unsplash.com/photo-1505691938895-1758d7feb511",
+    description:"Cozy one-bedroom property located close to Cork city centre."
+  }
+];
 ];
 
 let userListings = JSON.parse(localStorage.getItem("listings")) || [];
