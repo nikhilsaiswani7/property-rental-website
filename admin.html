@@ -280,7 +280,9 @@ function renderEnquiries() {
         <div class="meta">${new Date(e.date).toLocaleString()}</div>
         <p><strong>${e.name}</strong> (${e.email})</p>
         <p>${e.message}</p>
-        <button class="danger" onclick="deleteEnquiry(${i})">Delete enquiry</button>
+        <button onclick="replyEmail(${i})">Reply via Email</button>
+<button class="danger" onclick="deleteEnquiry(${i})">Delete enquiry</button>
+
       </div>
     `;
   });
@@ -293,6 +295,26 @@ function deleteEnquiry(index) {
   enquiries.splice(enquiries.length - 1 - index, 1);
   localStorage.setItem("enquiries", JSON.stringify(enquiries));
   renderEnquiries();
+}
+  function replyEmail(index) {
+  const e = enquiries[enquiries.length - 1 - index];
+
+  const subject = encodeURIComponent(
+    "Regarding: " + e.title
+  );
+
+  const body = encodeURIComponent(
+    "Hi " + e.name + ",\n\n" +
+    "Thanks for your enquiry about \"" + e.title + "\".\n\n" +
+    "Your message:\n" +
+    "\"" + e.message + "\"\n\n" +
+    "Best regards,\n"
+  );
+
+  window.location.href =
+    "mailto:" + e.email +
+    "?subject=" + subject +
+    "&body=" + body;
 }
 </script>
 
