@@ -1,283 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Property Details | RentIreland</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Property Details | RentIreland</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    /* RESET (CRITICAL) */
-    input, textarea, button {
-      font-family: inherit;
-      font-size: 16px;
-      box-sizing: border-box;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                   Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      background: #f5f7fa;
-    }
+header {
+  background: white;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
 
-    .container {
-      max-width: 1200px;
-      margin: 30px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 14px;
-    }
+header a {
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: bold;
+}
 
-    /* IMAGE GALLERY */
-    .gallery {
-      margin-bottom: 25px;
-    }
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+}
 
-    .hero {
-      width: 100%;
-      height: 420px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
+img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
 
-    .thumbnails {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
+.price {
+  color: #2563eb;
+  font-size: 26px;
+  font-weight: bold;
+}
 
-    .thumbnails img {
-      width: 90px;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 6px;
-      cursor: pointer;
-      opacity: 0.7;
-    }
+.meta {
+  color: #555;
+  margin-bottom: 15px;
+}
 
-    .thumbnails img:hover {
-      opacity: 1;
-    }
+.description {
+  margin-top: 20px;
+  line-height: 1.6;
+}
 
-    h1 {
-      font-size: 32px;
-      margin-top: 20px;
-    }
+.enquiry {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-    h3 {
-      margin-top: 35px;
-      margin-bottom: 12px;
-    }
+.enquiry input,
+.enquiry textarea {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
 
-    p {
-      line-height: 1.6;
-    }
+.enquiry textarea {
+  min-height: 140px;
+}
 
-    .section {
-      padding-top: 25px;
-      margin-top: 35px;
-      border-top: 1px solid #e5e7eb;
-    }
+.enquiry button {
+  background: #2563eb;
+  color: white;
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    .meta {
-      color: #555;
-      font-size: 15px;
-      margin-bottom: 10px;
-    }
-
-    .price {
-      color: #2563eb;
-      font-size: 26px;
-      font-weight: bold;
-      margin: 12px 0;
-    }
-
-    .details {
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    .availability {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 20px;
-    }
-
-    /* TRUST */
-    .trust-box {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 25px 0;
-    }
-
-    .verified {
-      color: green;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .trust-text {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 8px;
-    }
-
-    .report-link {
-      font-size: 14px;
-      color: #b91c1c;
-      text-decoration: none;
-    }
-
-    /* AMENITIES */
-    .amenities {
-      list-style: none;
-      padding: 0;
-      margin-top: 10px;
-    }
-
-    .amenities li {
-      padding: 6px 0;
-      font-size: 15px;
-    }
-
-    /* ✅ ENQUIRY FORM — FIXED */
-    .enquiry {
-      display: block;
-      margin-top: 25px;
-    }
-
-    .enquiry input,
-    .enquiry textarea {
-      display: block;
-      width: 100%;
-      padding: 16px;
-      margin-bottom: 14px;
-      border-radius: 8px;
-      border: 1px solid #d1d5db;
-      background: white;
-    }
-
-    .enquiry input {
-      height: 52px;
-    }
-
-    .enquiry textarea {
-      min-height: 200px;
-      resize: vertical;
-    }
-
-    .enquiry button {
-      width: 100%;
-      height: 54px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .enquiry button:hover {
-      background: #1e4fd6;
-    }
-
-    /* DISCLAIMER */
-    .disclaimer {
-      font-size: 12px;
-      color: #666;
-      margin-top: 35px;
-      border-top: 1px solid #e5e7eb;
-      padding-top: 15px;
-    }
-  </style>
+.not-found {
+  text-align: center;
+  padding: 60px;
+  font-size: 20px;
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<header>
+  <a href="index.html">← Back to listings</a>
+</header>
 
-  <!-- GALLERY -->
-  <div class="gallery">
-    <img id="mainImage" class="hero"
-         src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
-    <div class="thumbnails">
-      <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994">
-      <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c">
-      <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
-      <img src="https://images.unsplash.com/photo-1494526585095-c41746248156">
-    </div>
-  </div>
-
-  <h1>Modern 2 Bed Apartment</h1>
-
-  <div class="meta">📍 Dublin City · Apartment · Furnished</div>
-
-  <div class="price">€2,100 / month</div>
-
-  <div class="details">
-    🛏 2 Beds &nbsp;|&nbsp; 🛁 2 Baths &nbsp;|&nbsp;
-    🪑 Furnished &nbsp;|&nbsp; ⚡ BER: B2
-  </div>
-
-  <p class="availability">📅 Available from: 1 November 2026</p>
-
-  <div class="trust-box">
-    <p class="verified">✔ Verified Listing</p>
-    <p class="trust-text">
-      This listing has been reviewed by RentIreland for accuracy and legitimacy.
-    </p>
-    <a href="#" class="report-link">⚠️ Report this listing</a>
-  </div>
-
-  <h3 class="section">Description</h3>
-  <p>
-    Bright and modern two-bedroom apartment located in the heart of Dublin.
-    Close to transport, shops, and amenities.
-  </p>
-
-  <h3 class="section">Amenities</h3>
-  <ul class="amenities">
-    <li>🚗 Parking available</li>
-    <li>🔥 Gas central heating</li>
-    <li>🐶 Pets allowed</li>
-    <li>🧺 Washing machine</li>
-    <li>📶 High-speed internet</li>
-    <li>🗑️ Bin collection included</li>
-  </ul>
-
-  <h3 class="section">Send an enquiry</h3>
-  <form class="enquiry">
-    <input type="text" placeholder="Your name" required>
-    <input type="email" placeholder="Your email" required>
-    <textarea placeholder="Your message to the landlord" required></textarea>
-    <button type="submit">Send Enquiry</button>
-  </form>
-
-  <p class="disclaimer">
-    RentIreland acts as a listing platform only. Renters should verify
-    details independently before making payments.
-  </p>
-
+<div class="container" id="property">
+  <!-- Content injected by JS -->
 </div>
 
 <script>
-/* GALLERY */
-const mainImage = document.getElementById("mainImage");
-document.querySelectorAll(".thumbnails img").forEach(img => {
-  img.addEventListener("click", () => {
-    mainImage.src = img.src;
-  });
-});
+/* =========================
+   GET PROPERTY ID
+========================= */
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
-/* ENQUIRY */
-document.querySelector(".enquiry").addEventListener("submit", e => {
-  e.preventDefault();
-  alert("Enquiry submitted (email integration next)");
+/* =========================
+   SEED LISTINGS (MATCH index.html)
+========================= */
+const seedListings = [
+  {
+    id: "seed-1",
+    title: "Modern 2 Bed Apartment",
+    county: "Dublin",
+    price: 2100,
+    img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
+    description:
+      "Bright and modern two-bedroom apartment located in Dublin city centre. Close to transport, shops, and amenities."
+  },
+  {
+    id: "seed-2",
+    title: "Galway City Apartment",
+    county: "Galway",
+    price: 1800,
+    img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c",
+    description:
+      "Comfortable apartment in Galway city, ideal for professionals and students."
+  },
+  {
+    id: "seed-3",
+    title: "Cozy 1 Bed",
+    county: "Cork",
+    price: 1400,
+    img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
+    description:
+      "Cozy one-bedroom property located close to Cork city centre."
+  }
+];
+
+/* =========================
+   LOAD USER LISTINGS
+========================= */
+const userListings = JSON.parse(localStorage.getItem("listings")) || [];
+
+/* MERGE */
+const allListings = [...seedListings, ...userListings];
+
+/* FIND PROPERTY */
+const property = allListings.find(p => p.id === id);
+
+const container = document.getElementById("property");
+
+/* =========================
+   RENDER
+========================= */
+if (!property) {
+  container.innerHTML = `
+    <div class="not-found">
+      Property not found.
+    </div>
+  `;
+} else {
+  container.innerHTML = `
+    <img src="${property.img}">
+    <h1>${property.title}</h1>
+    <div class="meta">${property.county}</div>
+    <div class="price">€${property.price} / month</div>
+
+    <div class="description">
+      ${property.description || "No description provided."}
+    </div>
+
+    <h3>Send an enquiry</h3>
+
+    <form class="enquiry">
+      <input type="text" placeholder="Your name" required>
+      <input type="email" placeholder="Your email" required>
+      <textarea placeholder="Your message to the landlord" required></textarea>
+      <button type="submit">Send Enquiry</button>
+    </form>
+  `;
+}
+
+/* =========================
+   ENQUIRY HANDLER
+========================= */
+document.addEventListener("submit", function(e) {
+  if (e.target.classList.contains("enquiry")) {
+    e.preventDefault();
+    alert("Enquiry sent! (MVP demo)");
+  }
 });
 </script>
 
