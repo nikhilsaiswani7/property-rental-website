@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin | Enquiries</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+}
+
+header {
+  background: white;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.enquiry {
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+.enquiry:last-child {
+  border-bottom: none;
+}
+
+.meta {
+  font-size: 14px;
+  color: #555;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>Enquiries Inbox</h2>
+</header>
+
+<div class="container" id="inbox"></div>
+
+<script>
+const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
+const inbox = document.getElementById("inbox");
+
+if (enquiries.length === 0) {
+  inbox.innerHTML = "<p>No enquiries yet.</p>";
+} else {
+  enquiries.reverse().forEach(e => {
+    inbox.innerHTML += `
+      <div class="enquiry">
+        <strong>${e.propertyTitle}</strong>
+        <div class="meta">${new Date(e.date).toLocaleString()}</div>
+        <p><strong>${e.name}</strong> (${e.email})</p>
+        <p>${e.message}</p>
+      </div>
+    `;
+  });
+}
+</script>
+
+</body>
+</html>
 
