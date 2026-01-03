@@ -33,6 +33,7 @@ header a {
   font-weight: bold;
 }
 
+/* SEARCH BAR */
 .search-bar {
   background: white;
   padding: 15px 20px;
@@ -55,12 +56,14 @@ header a {
   cursor: pointer;
 }
 
+/* MAP */
 #map {
   height: 450px;
   margin: 20px;
   border-radius: 12px;
 }
 
+/* LISTINGS */
 .container {
   padding: 20px;
   display: grid;
@@ -87,6 +90,16 @@ header a {
 .price {
   color: #2563eb;
   font-weight: bold;
+}
+
+.delete-btn {
+  margin-top: 10px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -116,7 +129,7 @@ header a {
 
 <script>
 /* =========================
-   1. SEED / DEMO LISTINGS
+   SEED / DEMO LISTINGS
 ========================= */
 const seedListings = [
   {
@@ -149,14 +162,12 @@ const seedListings = [
 ];
 
 /* =========================
-   2. LOAD USER LISTINGS
+   LOAD USER LISTINGS
 ========================= */
-const userListings = JSON.parse(localStorage.getItem("listings")) || [];
+let userListings = JSON.parse(localStorage.getItem("listings")) || [];
 
-/* =========================
-   3. MERGE BOTH SOURCES
-========================= */
-const properties = [...seedListings, ...userListings];
+/* MERGE BOTH */
+let properties = [...seedListings, ...userListings];
 
 /* =========================
    MAP (STABLE)
@@ -178,11 +189,12 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 let markers = [];
 
 /* =========================
-   RENDER
+   RENDER FUNCTION
 ========================= */
 function render(list) {
   const listings = document.getElementById("listings");
   listings.innerHTML = "";
+
   markers.forEach(m => map.removeLayer(m));
   markers = [];
 
@@ -194,6 +206,14 @@ function render(list) {
           <h3>${p.title}</h3>
           <p>${p.county}</p>
           <div class="price">€${p.price} / month</div>
+
+          ${
+            p.id.startsWith("user-")
+              ? `<button class="delete-btn" onclick="deleteListing('${p.id}')">
+                   Delete listing
+                 </button>`
+              : ""
+          }
         </div>
       </div>
     `;
@@ -201,6 +221,7 @@ function render(list) {
     const marker = L.marker([p.lat, p.lng])
       .addTo(map)
       .bindPopup(`<strong>${p.title}</strong>`);
+
     markers.push(marker);
   });
 }
@@ -218,6 +239,17 @@ function applyFilters() {
   );
 
   render(filtered);
+}
+
+/* =========================
+   DELETE LISTING (USER ONLY)
+========================= */
+function deleteListing(id) {
+  userListings = userListings.filter(l => l.id !== id);
+  localStorage.setItem("listings", JSON.stringify(userListings));
+
+  properties = [...seedListings, ...userListings];
+  render(properties);
 }
 
 /* INIT */
