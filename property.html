@@ -35,7 +35,10 @@ box.innerHTML=`
 <h1>${p.title}</h1>
 <p>${p.county}</p>
 <div class="price">€${p.price}</div>
-<p>${p.description||""}</p>
+<p>
+  ${p.description ? p.description : "No description provided."}
+</p>
+
 
 <form id="enq">
 <input id="n" placeholder="Name" required>
