@@ -108,6 +108,10 @@ function render(list){
           <h3><a href="property.html?id=${p.id}" style="text-decoration:none;color:black">${p.title}</a></h3>
           <p>${p.county}</p>
           <div class="price">€${p.price} / month</div>
+<p style="color:#555;font-size:14px;">
+  ${(p.description || "").slice(0, 80)}${p.description && p.description.length > 80 ? "..." : ""}
+</p>
+
           ${p.id.startsWith("user-") ? `<button class="delete" onclick="deleteListing('${p.id}')">Delete</button>` : ""}
         </div>
       </div>`;
