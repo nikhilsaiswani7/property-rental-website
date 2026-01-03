@@ -1,29 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Admin</title>
+<meta charset="UTF-8">
+<title>Admin Panel | RentIreland</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-body { font-family:Arial; background:#f5f7fa; }
-.container { max-width:900px; margin:30px auto; background:white; padding:20px; border-radius:12px; }
-.enq { border-bottom:1px solid #ddd; padding:10px 0; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+}
+
+header {
+  background: white;
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+  margin: 0;
+  color: #2563eb;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.section {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  margin-top: 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.listing, .enquiry {
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.listing:last-child,
+.enquiry:last-child {
+  border-bottom: none;
+}
+
+.meta {
+  color: #555;
+  font-size: 14px;
+}
+
+button {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.small {
+  font-size: 14px;
+}
 </style>
 </head>
 
 <body>
-<div class="container" id="inbox"></div>
+
+<header>
+  <h1>Admin Panel</h1>
+</header>
+
+<div class="container">
+
+  <!-- LISTINGS -->
+  <div class="section">
+    <h2>Listings</h2>
+    <div id="listings"></div>
+  </div>
+
+  <!-- ENQUIRIES -->
+  <div class="section">
+    <h2>Enquiries</h2>
+    <div id="enquiries"></div>
+  </div>
+
+</div>
 
 <script>
-const data=JSON.parse(localStorage.getItem("enquiries"))||[];
-if(!data.length){ inbox.innerHTML="No enquiries"; }
-data.reverse().forEach(e=>{
-  inbox.innerHTML+=`
-  <div class="enq">
-    <strong>${e.title}</strong><br>
-    ${e.name} (${e.email})<br>
-    ${e.message}
-  </div>`;
-});
+/* =========================
+   LOAD LISTINGS
+========================= */
+const seedListings = [
+  { id:"seed-1", title:"Modern 2 Bed Apartment" },
+  { id:"seed-2", title:"Galway City Apartment" },
+  { id:"seed-3", title:"Cozy 1 Bed" }
+];
+
+let userListings = JSON.parse(localStorage.getItem("listings")) || [];
+const allListings = [...seedListings, ...userListings];
+
+const listingsBox = document.getElementById("listings");
+
+if (allListings.length === 0) {
+  listingsBox.innerHTML = "<p>No listings found.</p>";
+} else {
+  allListings.forEach(l => {
+    listingsBox.innerHTML += `
+      <div class="listing">
+        <strong>${l.title}</strong>
+        <div class="meta">ID: ${l.id}</div>
+        ${
+          l.id.startsWith("user-")
+            ? `<button onclick="deleteListing('${l.id}')">Delete listing</button>`
+            : `<div class="small meta">Seed listing (cannot delete)</div>`
+        }
+      </div>
+    `;
+  });
+}
+
+/* =========================
+   LOAD ENQUIRIES
+========================= */
+let enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
+const enquiriesBox = document.getElementById("enquiries");
+
+function renderEnquiries() {
+  enquiriesBox.innerHTML = "";
+
+  if (enquiries.length === 0) {
+    enquiriesBox.innerHTML = "<p>No enquiries yet.</p>";
+    return;
+  }
+
+  enquiries
+    .slice()
+    .reverse()
+    .forEach((e, i) => {
+      enquiriesBox.innerHTML += `
+        <div class="enquiry">
+          <strong>${e.title}</strong>
+          <div class="meta">${new Date(e.date).toLocaleString()}</div>
+          <p><strong>${e.name}</strong> (${e.email})</p>
+          <p>${e.message}</p>
+          <button onclick="deleteEnquiry(${i})">Delete enquiry</button>
+        </div>
+      `;
+    });
+}
+
+renderEnquiries();
+
+/* =========================
+   ACTIONS
+========================= */
+function deleteListing(id) {
+  if (!confirm("Delete this listing?")) return;
+
+  userListings = userListings.filter(l => l.id !== id);
+  localStorage.setItem("listings", JSON.stringify(userListings));
+  location.reload();
+}
+
+function deleteEnquiry(index) {
+  if (!confirm("Delete this enquiry?")) return;
+
+  enquiries.splice(enquiries.length - 1 - index, 1);
+  localStorage.setItem("enquiries", JSON.stringify(enquiries));
+  renderEnquiries();
+}
 </script>
+
 </body>
 </html>
