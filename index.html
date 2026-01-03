@@ -115,24 +115,52 @@ header a {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-/* DEMO LISTINGS */
-const demoListings = [
+/* =========================
+   1. SEED / DEMO LISTINGS
+========================= */
+const seedListings = [
   {
+    id: "seed-1",
     title: "Modern 2 Bed Apartment",
     county: "Dublin",
     price: 2100,
     lat: 53.3498,
     lng: -6.2603,
-    img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-    url: "property.html"
+    img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994"
+  },
+  {
+    id: "seed-2",
+    title: "Galway City Apartment",
+    county: "Galway",
+    price: 1800,
+    lat: 53.2707,
+    lng: -9.0568,
+    img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c"
+  },
+  {
+    id: "seed-3",
+    title: "Cozy 1 Bed",
+    county: "Cork",
+    price: 1400,
+    lat: 51.8985,
+    lng: -8.4756,
+    img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511"
   }
 ];
 
-/* LOAD SAVED LISTINGS */
-const savedListings = JSON.parse(localStorage.getItem("listings")) || [];
-const properties = [...demoListings, ...savedListings];
+/* =========================
+   2. LOAD USER LISTINGS
+========================= */
+const userListings = JSON.parse(localStorage.getItem("listings")) || [];
 
-/* MAP */
+/* =========================
+   3. MERGE BOTH SOURCES
+========================= */
+const properties = [...seedListings, ...userListings];
+
+/* =========================
+   MAP (STABLE)
+========================= */
 const irelandBounds = L.latLngBounds([51.3,-10.6],[55.5,-5.3]);
 const map = L.map("map", {
   maxBounds: irelandBounds,
@@ -149,7 +177,9 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 let markers = [];
 
-/* RENDER */
+/* =========================
+   RENDER
+========================= */
 function render(list) {
   const listings = document.getElementById("listings");
   listings.innerHTML = "";
@@ -175,7 +205,9 @@ function render(list) {
   });
 }
 
-/* FILTER */
+/* =========================
+   FILTERS
+========================= */
 function applyFilters() {
   const county = document.getElementById("county").value;
   const maxPrice = document.getElementById("maxPrice").value;
