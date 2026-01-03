@@ -51,11 +51,6 @@ img {
   margin-bottom: 15px;
 }
 
-.description {
-  margin-top: 20px;
-  line-height: 1.6;
-}
-
 .enquiry {
   margin-top: 30px;
   display: flex;
@@ -85,10 +80,9 @@ img {
   cursor: pointer;
 }
 
-.not-found {
-  text-align: center;
-  padding: 60px;
-  font-size: 20px;
+.success {
+  margin-top: 15px;
+  color: green;
 }
 </style>
 </head>
@@ -99,20 +93,15 @@ img {
   <a href="index.html">← Back to listings</a>
 </header>
 
-<div class="container" id="property">
-  <!-- Content injected by JS -->
-</div>
+<div class="container" id="property"></div>
 
 <script>
 /* =========================
-   GET PROPERTY ID
+   LOAD PROPERTY
 ========================= */
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
-/* =========================
-   SEED LISTINGS (MATCH index.html)
-========================= */
 const seedListings = [
   {
     id: "seed-1",
@@ -120,8 +109,7 @@ const seedListings = [
     county: "Dublin",
     price: 2100,
     img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-    description:
-      "Bright and modern two-bedroom apartment located in Dublin city centre. Close to transport, shops, and amenities."
+    description: "Bright and modern two-bedroom apartment in Dublin city centre."
   },
   {
     id: "seed-2",
@@ -129,8 +117,7 @@ const seedListings = [
     county: "Galway",
     price: 1800,
     img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c",
-    description:
-      "Comfortable apartment in Galway city, ideal for professionals and students."
+    description: "Comfortable apartment in Galway city."
   },
   {
     id: "seed-3",
@@ -138,63 +125,63 @@ const seedListings = [
     county: "Cork",
     price: 1400,
     img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
-    description:
-      "Cozy one-bedroom property located close to Cork city centre."
+    description: "Cozy one-bedroom property in Cork."
   }
 ];
 
-/* =========================
-   LOAD USER LISTINGS
-========================= */
 const userListings = JSON.parse(localStorage.getItem("listings")) || [];
-
-/* MERGE */
 const allListings = [...seedListings, ...userListings];
 
-/* FIND PROPERTY */
 const property = allListings.find(p => p.id === id);
-
 const container = document.getElementById("property");
 
-/* =========================
-   RENDER
-========================= */
 if (!property) {
-  container.innerHTML = `
-    <div class="not-found">
-      Property not found.
-    </div>
-  `;
-} else {
-  container.innerHTML = `
-    <img src="${property.img}">
-    <h1>${property.title}</h1>
-    <div class="meta">${property.county}</div>
-    <div class="price">€${property.price} / month</div>
-
-    <div class="description">
-      ${property.description || "No description provided."}
-    </div>
-
-    <h3>Send an enquiry</h3>
-
-    <form class="enquiry">
-      <input type="text" placeholder="Your name" required>
-      <input type="email" placeholder="Your email" required>
-      <textarea placeholder="Your message to the landlord" required></textarea>
-      <button type="submit">Send Enquiry</button>
-    </form>
-  `;
+  container.innerHTML = "<p>Property not found.</p>";
+  throw new Error("Property not found");
 }
 
+container.innerHTML = `
+  <img src="${property.img}">
+  <h1>${property.title}</h1>
+  <div class="meta">${property.county}</div>
+  <div class="price">€${property.price} / month</div>
+  <p>${property.description || ""}</p>
+
+  <h3>Send an enquiry</h3>
+
+  <form class="enquiry" id="enquiryForm">
+    <input id="name" placeholder="Your name" required>
+    <input id="email" type="email" placeholder="Your email" required>
+    <textarea id="message" placeholder="Your message" required></textarea>
+    <button type="submit">Send Enquiry</button>
+  </form>
+
+  <div class="success" id="success"></div>
+`;
+
 /* =========================
-   ENQUIRY HANDLER
+   SAVE ENQUIRY
 ========================= */
-document.addEventListener("submit", function(e) {
-  if (e.target.classList.contains("enquiry")) {
-    e.preventDefault();
-    alert("Enquiry sent! (MVP demo)");
-  }
+document.getElementById("enquiryForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const enquiry = {
+    propertyId: id,
+    propertyTitle: property.title,
+    name: name.value,
+    email: email.value,
+    message: message.value,
+    date: new Date().toISOString()
+  };
+
+  const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
+  enquiries.push(enquiry);
+  localStorage.setItem("enquiries", JSON.stringify(enquiries));
+
+  document.getElementById("success").innerText =
+    "✅ Enquiry sent successfully.";
+
+  this.reset();
 });
 </script>
 
