@@ -37,7 +37,6 @@ body {
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 16px;
 }
 
 /* ADMIN */
@@ -86,17 +85,39 @@ header h1 {
   font-size: 14px;
 }
 
-button.danger {
-  background: #dc2626;
-  color: white;
-  border: none;
+button {
   padding: 6px 10px;
   border-radius: 6px;
+  border: none;
   cursor: pointer;
   margin-top: 6px;
 }
 
-.small {
+button.danger {
+  background: #dc2626;
+  color: white;
+}
+
+button.edit {
+  background: #2563eb;
+  color: white;
+  margin-right: 6px;
+}
+
+/* EDIT FORM */
+.edit-form {
+  background: #f9fafb;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.edit-form input,
+.edit-form textarea,
+.edit-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
   font-size: 14px;
 }
 </style>
@@ -104,7 +125,7 @@ button.danger {
 
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login" id="loginBox">
   <h2>Admin Login</h2>
   <input id="password" type="password" placeholder="Enter admin password">
@@ -112,7 +133,7 @@ button.danger {
   <p id="error" style="color:red;"></p>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div id="adminPanel" style="display:none;">
 
 <header>
@@ -138,36 +159,33 @@ button.danger {
 
 <script>
 /* =========================
-   CONFIG — CHANGE THIS
+   CONFIG
 ========================= */
-const ADMIN_PASSWORD = "admin123"; // <-- change this
+const ADMIN_PASSWORD = "admin123";
 
 /* =========================
-   LOGIN LOGIC
+   LOGIN
 ========================= */
 function login() {
-  const input = document.getElementById("password").value;
-
-  if (input === ADMIN_PASSWORD) {
+  if (password.value === ADMIN_PASSWORD) {
     sessionStorage.setItem("admin-auth", "true");
     showAdmin();
   } else {
-    document.getElementById("error").innerText = "Incorrect password";
+    error.innerText = "Incorrect password";
   }
 }
 
 function showAdmin() {
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("adminPanel").style.display = "block";
+  loginBox.style.display = "none";
+  adminPanel.style.display = "block";
 }
 
-/* Auto-login if already authenticated */
 if (sessionStorage.getItem("admin-auth") === "true") {
   showAdmin();
 }
 
 /* =========================
-   LOAD LISTINGS
+   LISTINGS
 ========================= */
 const seedListings = [
   { id:"seed-1", title:"Modern 2 Bed Apartment" },
@@ -176,26 +194,73 @@ const seedListings = [
 ];
 
 let userListings = JSON.parse(localStorage.getItem("listings")) || [];
-const allListings = [...seedListings, ...userListings];
-
 const listingsBox = document.getElementById("listings");
 
-allListings.forEach(l => {
-  listingsBox.innerHTML += `
-    <div class="listing">
-      <strong>${l.title}</strong>
-      <div class="meta">ID: ${l.id}</div>
-      ${
-        l.id.startsWith("user-")
-          ? `<button class="danger" onclick="deleteListing('${l.id}')">Delete listing</button>`
-          : `<div class="small meta">Seed listing (protected)</div>`
-      }
+function renderListings() {
+  listingsBox.innerHTML = "";
+
+  [...seedListings, ...userListings].forEach(l => {
+    listingsBox.innerHTML += `
+      <div class="listing">
+        <strong>${l.title}</strong>
+        <div class="meta">ID: ${l.id}</div>
+
+        ${
+          l.id.startsWith("user-")
+            ? `
+              <button class="edit" onclick="openEdit('${l.id}')">Edit</button>
+              <button class="danger" onclick="deleteListing('${l.id}')">Delete</button>
+              <div id="edit-${l.id}"></div>
+            `
+            : `<div class="meta">Seed listing (read-only)</div>`
+        }
+      </div>
+    `;
+  });
+}
+
+renderListings();
+
+function openEdit(id) {
+  const listing = userListings.find(l => l.id === id);
+  const box = document.getElementById("edit-" + id);
+
+  box.innerHTML = `
+    <div class="edit-form">
+      <input id="title-${id}" value="${listing.title}">
+      <input id="price-${id}" type="number" value="${listing.price}">
+      <select id="county-${id}">
+        <option ${listing.county==="Dublin"?"selected":""}>Dublin</option>
+        <option ${listing.county==="Galway"?"selected":""}>Galway</option>
+        <option ${listing.county==="Cork"?"selected":""}>Cork</option>
+      </select>
+      <textarea id="desc-${id}">${listing.description || ""}</textarea>
+      <button class="edit" onclick="saveEdit('${id}')">Save</button>
     </div>
   `;
-});
+}
+
+function saveEdit(id) {
+  const l = userListings.find(x => x.id === id);
+
+  l.title = document.getElementById("title-"+id).value;
+  l.price = Number(document.getElementById("price-"+id).value);
+  l.county = document.getElementById("county-"+id).value;
+  l.description = document.getElementById("desc-"+id).value;
+
+  localStorage.setItem("listings", JSON.stringify(userListings));
+  renderListings();
+}
+
+function deleteListing(id) {
+  if (!confirm("Delete this listing?")) return;
+  userListings = userListings.filter(l => l.id !== id);
+  localStorage.setItem("listings", JSON.stringify(userListings));
+  renderListings();
+}
 
 /* =========================
-   LOAD ENQUIRIES
+   ENQUIRIES
 ========================= */
 let enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
 const enquiriesBox = document.getElementById("enquiries");
@@ -203,43 +268,28 @@ const enquiriesBox = document.getElementById("enquiries");
 function renderEnquiries() {
   enquiriesBox.innerHTML = "";
 
-  if (enquiries.length === 0) {
+  if (!enquiries.length) {
     enquiriesBox.innerHTML = "<p>No enquiries yet.</p>";
     return;
   }
 
-  enquiries
-    .slice()
-    .reverse()
-    .forEach((e, i) => {
-      enquiriesBox.innerHTML += `
-        <div class="enquiry">
-          <strong>${e.title}</strong>
-          <div class="meta">${new Date(e.date).toLocaleString()}</div>
-          <p><strong>${e.name}</strong> (${e.email})</p>
-          <p>${e.message}</p>
-          <button class="danger" onclick="deleteEnquiry(${i})">Delete enquiry</button>
-        </div>
-      `;
-    });
+  enquiries.slice().reverse().forEach((e, i) => {
+    enquiriesBox.innerHTML += `
+      <div class="enquiry">
+        <strong>${e.title}</strong>
+        <div class="meta">${new Date(e.date).toLocaleString()}</div>
+        <p><strong>${e.name}</strong> (${e.email})</p>
+        <p>${e.message}</p>
+        <button class="danger" onclick="deleteEnquiry(${i})">Delete enquiry</button>
+      </div>
+    `;
+  });
 }
 
 renderEnquiries();
 
-/* =========================
-   ACTIONS
-========================= */
-function deleteListing(id) {
-  if (!confirm("Delete this listing?")) return;
-
-  userListings = userListings.filter(l => l.id !== id);
-  localStorage.setItem("listings", JSON.stringify(userListings));
-  location.reload();
-}
-
 function deleteEnquiry(index) {
   if (!confirm("Delete this enquiry?")) return;
-
   enquiries.splice(enquiries.length - 1 - index, 1);
   localStorage.setItem("enquiries", JSON.stringify(enquiries));
   renderEnquiries();
